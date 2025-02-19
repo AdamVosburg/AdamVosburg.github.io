@@ -7,104 +7,139 @@
 * Link: https://pixabay.com/photos/desk-office-wood-nature-computer-8380078/
 */
 
-/* Base styles for the entire page */
+/* This creates the base style for the entire page */
 body {
-    /* This sets up the background image with proper scaling */
-    background-image: url('https://cdn.pixabay.com/photo/2023/11/04/09/05/desk-8364764_1280.jpg');
-    background-size: cover; /* Ensures image covers entire viewport */
-    background-position: center; 
-    background-repeat: no-repeat; /* Prevents image from repeating */
-    background-attachment: fixed; /* Keeps background fixed while scrolling */
-    background-color: #f5f5f5; /* Provides a whitesmoke fallback color if image fails to load */
-    margin: 0; /* Removes margin */
-    font-family: Arial, sans-serif; /* Sets default font to Arial Sans-Serif */
-    line-height: 1.6; 
+   /* This sets up the background image with proper scaling */
+   background-image: url('https://cdn.pixabay.com/photo/2023/11/04/09/05/desk-8364764_1280.jpg');
+   background-size: cover; /* Ensures image covers entire viewport */
+   background-position: center; 
+   background-repeat: no-repeat; /* Prevents image from repeating */
+   background-attachment: fixed; /* Keeps background fixed while scrolling */
+   background-color: #f5f5f5; /* Provides a whitesmoke fallback color if image fails to load */
+   margin: 0; /* Removes margin */
+   font-family: Arial, sans-serif; /* Sets default font to Arial Sans-Serif */
+   line-height: 1.6; 
 }
 
 /* Main content container */
 .content-wrapper {
-    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
-    min-height: 100vh; 
-    margin: 0 auto; 
-    padding: 2rem; 
-    max-width: 1200px; /* Limits maximum width for readability */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Adds a slight shadow to provide some depth */
+   background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+   min-height: 100vh; 
+   margin: 0 auto; 
+   padding: 2rem; 
+   max-width: 1200px; /* Limits maximum width for readability */
+   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Adds a slight shadow to provide some depth */
 }
 
-/* Provides a styling for the headers of the page */
+/* Header styling with GitHub Pages URL integration */
 header {
-    text-align: center;
-    padding: 2rem 0;
-    margin-bottom: 2rem;
-}
-/*Give the trademark Github Blue color to the URL*/
-.site-url {
-    font-family: monospace; /* Makes the URL stand out with a code-like font */
-    color: #0366d6; /* GitHub's blue color */
-    margin: 1rem 0;
-    font-size: 1.2rem;
-    letter-spacing: 0.5px;
+   text-align: center;
+   padding: 2rem 0;
+   margin-bottom: 2rem;
 }
 
+/* Main title and URL styling */
 header h1 {
-    color: #333;
-    margin-bottom: 0.5rem;
+   color: #333;
+   margin-bottom: 0.5rem;
+   font-size: 2.5em;
+}
+
+/* Subtitle with GitHub Pages URL */
+header h2 {
+   margin-top: 0.5rem;
+   margin-bottom: 1.5rem;
+}
+
+/* Special styling for the URL display */
+header .github-url {
+   font-family: monospace; /* Makes the URL stand out with a code-like font */
+   color: #0366d6; /* GitHub's blue color */
+   font-size: 1rem;
+   letter-spacing: 0.5px;
+   margin-top: 0.5rem;
+   display: block; /* Makes it appear on its own line */
 }
 
 /* Navigation bar styling */
 nav {
-    background-color: #333;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 5px; /* Provides rounded corners for the navigation bars*/
+   background-color: #2d2d2d; /* Darker nav background */
+   padding: 1rem;
+   margin: 1rem 0;
+   border-radius: 5px; /* Provides rounded corners for the navigation bars*/
+   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex; /* Creates horizontal navigation */
-    justify-content: center;
-    gap: 2rem; /* Spaces navigation items */
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   display: flex; /* Creates horizontal navigation */
+   justify-content: center;
+   gap: 2rem; /* Spaces navigation items */
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s; /* Smooth hover effect */
+   color: white;
+   text-decoration: none;
+   padding: 0.5rem 1rem;
+   transition: background-color 0.3s; /* Smooth hover effect */
 }
 
 nav a:hover {
-    background-color: #555;
-    border-radius: 3px;
+   background-color: #555;
+   border-radius: 3px;
+}
+
+/* Main content section styling */
+main {
+   max-width: 1000px;
+   margin: 0 auto;
+   padding: 0 20px;
 }
 
 /* Section styling */
 section {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent sections */
-    border-radius: 5px;
+   margin: 2rem 0;
+   padding: 1rem;
+   background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent sections */
+   border-radius: 5px;
 }
 
 /* Footer styling */
 footer {
-    text-align: center;
-    padding: 2rem 0;
-    margin-top: 2rem;
-    border-top: 1px solid #ddd;
+   text-align: center;
+   padding: 2rem 0;
+   margin-top: 2rem;
+   border-top: 1px solid #ddd;
+}
+
+footer a {
+   color: #0366d6;
+   text-decoration: none;
+}
+
+footer a:hover {
+   text-decoration: underline;
 }
 
 /* Enabled to ensure the page is responsive to all types of devices */
 @media (max-width: 768px) {
-    .content-wrapper {
-        padding: 1rem;
-    }
-    
-    nav ul {
-        flex-direction: column; /* Stacks navigation items vertically */
-        align-items: center;
-        gap: 1rem;
-    }
+   .content-wrapper {
+       padding: 1rem;
+   }
+   
+   nav ul {
+       flex-direction: column; /* Stacks navigation items vertically */
+       align-items: center;
+       gap: 1rem;
+   }
+
+   header h1 {
+       font-size: 2em;
+   }
+
+   header .github-url {
+       font-size: 0.9rem;
+   }
 }
