@@ -10,7 +10,7 @@
 /* This creates the base style for the entire page */
 body {
    /* This sets up the background image with proper scaling */
-   background-image: url('https://cdn.pixabay.com/photo/2023/11/04/09/05/desk-8364764_1280.jpg');
+   background-image: url('https://pixabay.com/photos/desk-office-wood-nature-computer-8380078/');
    background-size: cover; /* Ensures image covers entire viewport */
    background-position: center; 
    background-repeat: no-repeat; /* Prevents image from repeating */
