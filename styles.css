@@ -37,6 +37,14 @@ header {
     padding: 2rem 0;
     margin-bottom: 2rem;
 }
+/*Give the trademark Github Blue color to the URL*/
+.site-url {
+    font-family: monospace; /* Makes the URL stand out with a code-like font */
+    color: #0366d6; /* GitHub's blue color */
+    margin: 1rem 0;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
 
 header h1 {
     color: #333;
