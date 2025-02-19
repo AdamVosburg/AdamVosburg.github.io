@@ -1,5 +1,5 @@
 /* 
-* Background Image attribution is featured below:
+* Background Image Attribution:
 * Image: "desk-office-wood-nature-computer"
 * Source: Pixabay
 * Author: Kanenori
@@ -7,32 +7,96 @@
 * Link: https://pixabay.com/photos/desk-office-wood-nature-computer-8380078/
 */
 
+/* Base styles for the entire page */
 body {
+    /* This sets up the background image with proper scaling */
     background-image: url('https://pixabay.com/get/gf3bbf6fc2fcbbcb06df0e88f4d5ba171bba01a15a3eb1ce09d09dec1fcbdbb2e36cc4c18eb0b2d1ea6e92f8c1bb80a91fe7cbc9ffbb70e1533c9c0c8f75a46c_1280.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-color: #f5f5f5; /* Fallback color */
+    background-size: cover; /* Ensures image covers entire viewport */
+    background-position: center; 
+    background-repeat: no-repeat; /* Prevents image from repeating */
+    background-attachment: fixed; /* Keeps background fixed while scrolling */
+    background-color: #f5f5f5; /* Provides a whitesmoke fallback color if image fails to load */
+    margin: 0; /* Removes margin */
+    font-family: Arial, sans-serif; /* Sets default font to Arial Sans-Serif */
+    line-height: 1.6; 
 }
 
-/* Providing an overlay to ensure that the picture is clear and crisp */
+/* Main content container */
 .content-wrapper {
-    background-color: rgba(255, 255, 255, 0.85);
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: 2rem;
-    max-width: 1200px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+    min-height: 100vh; 
+    margin: 0 auto; 
+    padding: 2rem; 
+    max-width: 1200px; /* Limits maximum width for readability */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Adds a slight shadow to provide some depth */
 }
 
-/* Automatically resizes the image to ensure it sacles to the website on any devices */
+/* Provides a styling for the headers of the page */
+header {
+    text-align: center;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Navigation bar styling */
+nav {
+    background-color: #333;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 5px; /* Provides rounded corners for the navigation bars*/
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Creates horizontal navigation */
+    justify-content: center;
+    gap: 2rem; /* Spaces navigation items */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s; /* Smooth hover effect */
+}
+
+nav a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+
+/* Section styling */
+section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent sections */
+    border-radius: 5px;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid #ddd;
+}
+
+/* Enabled to ensure the page is responsive to all types of devices */
 @media (max-width: 768px) {
     .content-wrapper {
         padding: 1rem;
     }
     
-    body {
-        background-position: right center;
+    nav ul {
+        flex-direction: column; /* Stacks navigation items vertically */
+        align-items: center;
+        gap: 1rem;
     }
 }
