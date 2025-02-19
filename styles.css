@@ -10,7 +10,7 @@
 /* Base styles for the entire page */
 body {
     /* This sets up the background image with proper scaling */
-    background-image: url('https://pixabay.com/get/gf3bbf6fc2fcbbcb06df0e88f4d5ba171bba01a15a3eb1ce09d09dec1fcbdbb2e36cc4c18eb0b2d1ea6e92f8c1bb80a91fe7cbc9ffbb70e1533c9c0c8f75a46c_1280.jpg');
+    background-image: url('https://cdn.pixabay.com/photo/2023/11/04/09/05/desk-8364764_1280.jpg');
     background-size: cover; /* Ensures image covers entire viewport */
     background-position: center; 
     background-repeat: no-repeat; /* Prevents image from repeating */
