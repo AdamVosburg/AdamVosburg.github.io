@@ -1,0 +1,38 @@
+/* 
+* Background Image attribution is featured below:
+* Image: "desk-office-wood-nature-computer"
+* Source: Pixabay
+* Author: Kanenori
+* License: Pixabay License (Free for commercial use, No attribution required)
+* Link: https://pixabay.com/photos/desk-office-wood-nature-computer-8380078/
+*/
+
+body {
+    background-image: url('https://pixabay.com/get/gf3bbf6fc2fcbbcb06df0e88f4d5ba171bba01a15a3eb1ce09d09dec1fcbdbb2e36cc4c18eb0b2d1ea6e92f8c1bb80a91fe7cbc9ffbb70e1533c9c0c8f75a46c_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #f5f5f5; /* Fallback color */
+}
+
+/* Providing an overlay to ensure that the picture is clear and crisp */
+.content-wrapper {
+    background-color: rgba(255, 255, 255, 0.85);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 2rem;
+    max-width: 1200px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Automatically resizes the image to ensure it sacles to the website on any devices */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 1rem;
+    }
+    
+    body {
+        background-position: right center;
+    }
+}
