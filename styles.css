@@ -10,7 +10,7 @@
 /* Base styles for the entire page */
 body {
     /* This sets up the background image with proper scaling */
-    background-image: url('https://raw.githubusercontent.com/AdamVosburg/AdamVosburg.github.io/master/Images/desk-8380078_1280.jpg');
+    background-image: url('https://https://adamvosburg.github.io/Images/desk-8380078_1280.jpg);
     background-size: cover; /* Ensures image covers entire viewport */
     background-position: center; 
     background-repeat: no-repeat; /* Prevents image from repeating */
