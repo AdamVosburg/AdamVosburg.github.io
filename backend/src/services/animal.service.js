@@ -1,83 +1,130 @@
-const RescueAnimal = require('../models/base/rescueAnimal');
-const Dog = require('../models/dog.model');
-const Monkey = require('../models/monkey.model');
-const Bird = require('../models/bird.model');
-const Horse = require('../models/horse.model');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const path = require('path');
+const fs = require('fs');
 
+console.log('Starting to load animal.service.js');
+console.log('Current directory:', process.cwd());
+
+const modelsPath = path.join(__dirname, '..', '..', 'models');
+console.log('Models directory:', modelsPath);
+
+function checkFileExists(filePath) {
+  try {
+    fs.accessSync(filePath, fs.constants.F_OK);
+    console.log(`File exists: ${filePath}`);
+    return true;
+  } catch (err) {
+    console.error(`File does not exist: ${filePath}`);
+    return false;
+  }
+}
+
+console.log('About to require rescueAnimal model');
+let RescueAnimal;
+const rescueAnimalPath = path.join(modelsPath, 'base', 'rescueAnimal.js');
+if (checkFileExists(rescueAnimalPath)) {
+  RescueAnimal = require(rescueAnimalPath);
+  console.log('RescueAnimal model loaded successfully');
+} else {
+  console.error('RescueAnimal file not found');
+}
+
+const models = {};
+const modelFiles = ['dog.model.js', 'monkey.model.js', 'bird.model.js', 'horse.model.js'];
+
+modelFiles.forEach(file => {
+  const modelName = file.split('.')[0].charAt(0).toUpperCase() + file.split('.')[0].slice(1);
+  const modelPath = path.join(modelsPath, file);
+  if (checkFileExists(modelPath)) {
+    models[modelName] = require(modelPath);
+    console.log(`${modelName} model loaded successfully`);
+  } else {
+    console.error(`${modelName} model file not found`);
+  }
+});
+
+console.log('About to require apiError');
+let ApiError;
+const apiErrorPath = path.join(__dirname, '..', 'utils', 'apiError.js');
+if (checkFileExists(apiErrorPath)) {
+  ApiError = require(apiErrorPath);
+  console.log('ApiError loaded successfully');
+} else {
+  console.error('ApiError file not found');
+}
+
+console.log('About to require logger');
+let logger;
+const loggerPath = path.join(__dirname, '..', 'config', 'logger.js');
+if (checkFileExists(loggerPath)) {
+  logger = require(loggerPath);
+  console.log('Logger loaded successfully');
+} else {
+  console.error('Logger file not found');
+}
+
+console.log('Defining AnimalService class');
 class AnimalService {
-  // Factory method to create animal based on type
   static async createAnimal(animalType, animalData) {
+    console.log('Entering createAnimal method');
     try {
       let animal;
-      switch (animalType.toLowerCase()) {
-        case 'dog':
-          animal = new Dog(animalData);
-          break;
-        case 'monkey':
-          animal = new Monkey(animalData);
-          break;
-        case 'bird':
-          animal = new Bird(animalData);
-          break;
-        case 'horse':
-          animal = new Horse(animalData);
-          break;
-        default:
-          throw ApiError.badRequest('Invalid animal type');
+      const Model = models[animalType.charAt(0).toUpperCase() + animalType.slice(1)];
+      if (!Model) {
+        console.log('Invalid animal type');
+        throw ApiError.badRequest('Invalid animal type');
       }
+      animal = new Model(animalData);
 
-      // Log animal intake
+      console.log(`Logging new ${animalType} intake`);
       logger.info(`New ${animalType} intake: ${animal.id}`);
 
+      console.log('Saving animal');
       return await animal.save();
     } catch (error) {
+      console.error('Error in createAnimal:', error);
       logger.error(`Animal intake error: ${error.message}`);
       throw ApiError.internalServer('Failed to create animal record');
     }
   }
 
-  // Get animal by ID
   static async getAnimalById(id) {
+    console.log(`Entering getAnimalById method with id: ${id}`);
     const animal = await RescueAnimal.findById(id);
     if (!animal) {
+      console.log('Animal not found');
       throw ApiError.notFound('Animal not found');
     }
+    console.log('Animal found');
     return animal;
   }
 
-  // Update animal status
   static async updateAnimalStatus(id, status) {
+    console.log(`Entering updateAnimalStatus method for animal ${id} with status ${status}`);
     const animal = await this.getAnimalById(id);
     animal.trainingStatus = status;
+    console.log('Saving updated animal status');
     return await animal.save();
   }
 
-  // Assign trainer
   static async assignTrainer(animalId, trainerId) {
+    console.log(`Entering assignTrainer method for animal ${animalId} with trainer ${trainerId}`);
     const animal = await this.getAnimalById(animalId);
     animal.assignedTrainer = trainerId;
+    console.log('Saving assigned trainer');
     return await animal.save();
   }
 
-  // Get animals by type
   static async getAnimalsByType(type) {
-    switch (type.toLowerCase()) {
-      case 'dog':
-        return await Dog.find();
-      case 'monkey':
-        return await Monkey.find();
-      case 'bird':
-        return await Bird.find();
-      case 'horse':
-        return await Horse.find();
-      default:
-        throw ApiError.badRequest('Invalid animal type');
+    console.log(`Entering getAnimalsByType method for type: ${type}`);
+    const Model = models[type.charAt(0).toUpperCase() + type.slice(1)];
+    if (!Model) {
+      console.log('Invalid animal type');
+      throw ApiError.badRequest('Invalid animal type');
     }
+    return await Model.find();
   }
-
-  // Additional methods can be added as needed
 }
 
+console.log('About to export AnimalService');
 module.exports = AnimalService;
+console.log('AnimalService exported');

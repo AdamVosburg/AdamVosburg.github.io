@@ -1,27 +1,30 @@
 const Joi = require('joi');
 const ApiError = require('../utils/apiError');
+const logger = require('../config/logger'); // Ensure you have a logger setup
 
 class ValidationMiddleware {
-  // Generic validation middleware
+  // Generic validation middleware with debugging logs
   static validate(schema) {
     return (req, res, next) => {
+      logger.info('Validation middleware triggered');
+      logger.debug(`Request body: ${JSON.stringify(req.body)}`);
+      
       const { error } = schema.validate(req.body, { 
         abortEarly: false, 
         allowUnknown: true 
       });
 
       if (error) {
-        const errorMessage = error.details
-          .map(detail => detail.message)
-          .join(', ');
+        const errorMessage = error.details.map(detail => detail.message).join(', ');
+        logger.error(`Validation error: ${errorMessage}`);
         return next(ApiError.badRequest(errorMessage));
       }
 
+      logger.info('Validation passed');
       next();
     };
   }
 
-  // Base animal intake validation
   static baseAnimalIntakeSchema = Joi.object({
     name: Joi.string().trim().required(),
     gender: Joi.string().valid('Male', 'Female', 'Unknown').required(),
@@ -31,7 +34,6 @@ class ValidationMiddleware {
     acquisitionLocation: Joi.string().required()
   });
 
-  // Animal-specific validation methods can be added here
   static dogIntakeSchema = this.baseAnimalIntakeSchema.keys({
     breed: Joi.string().required(),
     serviceType: Joi.string().valid('SERVICE', 'THERAPY', 'SEARCH').required(),
@@ -46,8 +48,7 @@ class ValidationMiddleware {
     dexterityLevel: Joi.number().min(1).max(10).required(),
     toolUseCapability: Joi.boolean().required()
   });
-
-  // Similar schemas for bird and horse can be added
 }
 
+logger.info('ValidationMiddleware successfully loaded');
 module.exports = ValidationMiddleware;
