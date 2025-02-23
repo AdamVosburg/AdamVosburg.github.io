@@ -1,5 +1,5 @@
-const TrainerService = require('../services/trainer.service');
-const catchAsync = require('../utils/catchAsync');
+const TrainerService = require('../services/trainer.service.js');
+const catchAsync = require('../utils/catchAsync.js');
 
 class TrainerController {
   // Create a new trainer

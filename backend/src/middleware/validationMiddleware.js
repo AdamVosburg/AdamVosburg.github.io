@@ -1,6 +1,13 @@
+console.log('Starting to load validationMiddleware.js');
+console.log('About to require Joi');
 const Joi = require('joi');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger'); // Ensure you have a logger setup
+console.log('Joi loaded');
+console.log('About to require ApiError');
+const ApiError = require('../utils/apiError.js');
+console.log('ApiError loaded');
+console.log('About to require logger');
+const logger = require('../config/logger.js');
+console.log('Logger loaded');
 
 class ValidationMiddleware {
   // Generic validation middleware with debugging logs

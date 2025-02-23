@@ -1,5 +1,5 @@
-const MedicalRecordService = require('../services/medicalRecord.service');
-const catchAsync = require('../utils/catchAsync');
+const MedicalRecordService = require('../services/medicalRecord.service.js');
+const catchAsync = require('../utils/catchAsync.js');
 
 class MedicalRecordController {
   // Create a new medical record

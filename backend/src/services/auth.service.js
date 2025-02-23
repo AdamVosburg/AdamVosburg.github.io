@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const User = require('../../models/user.model.js');
+const ApiError = require('../utils/apiError.js');
+const logger = require('../config/logger.js');
 
 class AuthService {
   // Generate JWT token

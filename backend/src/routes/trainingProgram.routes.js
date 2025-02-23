@@ -7,7 +7,7 @@ console.log('Express loaded successfully');
 console.log('About to require TrainingProgramController');
 let TrainingProgramController;
 try {
-  TrainingProgramController = require('../controllers/trainingProgram.controller');
+  TrainingProgramController = require('../controllers/trainingProgram.controller.js');
   console.log('TrainingProgramController loaded successfully');
 } catch (error) {
   console.error('Error loading TrainingProgramController:', error.message);
@@ -17,7 +17,7 @@ try {
 console.log('About to require AuthMiddleware');
 let AuthMiddleware;
 try {
-  AuthMiddleware = require('../middleware/auth.middleware');
+  AuthMiddleware = require('../middleware/auth.middleware.js');
   console.log('AuthMiddleware loaded successfully');
 } catch (error) {
   console.error('Error loading AuthMiddleware:', error.message);
@@ -27,7 +27,7 @@ try {
 console.log('About to require ValidationMiddleware');
 let ValidationMiddleware;
 try {
-  ValidationMiddleware = require('../middleware/validationMiddleware');
+  ValidationMiddleware = require('../middleware/validationMiddleware.js');
   console.log('ValidationMiddleware loaded successfully');
 } catch (error) {
   console.error('Error loading ValidationMiddleware:', error.message);

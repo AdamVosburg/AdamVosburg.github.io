@@ -1,29 +1,30 @@
-const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
+console.log('Starting to load trainingProgram.model.js');
 
+console.log('About to require mongoose');
+const mongoose = require('mongoose');
+console.log('Mongoose loaded successfully');
+
+console.log('About to require uuid');
+const { v4: uuidv4 } = require('uuid');
+console.log('uuid loaded successfully');
+
+console.log('Defining trainingProgramSchema');
 const trainingProgramSchema = new mongoose.Schema({
-  // Unique Identifier
   programId: {
     type: String,
     default: uuidv4,
     unique: true,
     required: true
   },
-
-  // Animal Information
   animalId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'RescueAnimal',
     required: true
   },
-
-  // Program Details
   type: {
     type: String,
     required: true
   },
-
-  // Dates
   startDate: {
     type: Date,
     default: Date.now
@@ -35,29 +36,21 @@ const trainingProgramSchema = new mongoose.Schema({
   actualEndDate: {
     type: Date
   },
-
-  // Trainer Assignment
   trainer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trainer',
     required: true
   },
-
-  // Program Status
   status: {
     type: String,
     enum: ['Scheduled', 'In Progress', 'Completed', 'Extended'],
     default: 'Scheduled'
   },
-
-  // Progress Tracking
   progressReports: [{
     date: Date,
     report: String,
     completionPercentage: Number
   }],
-
-  // Milestones
   milestones: [{
     description: String,
     targetDate: Date,
@@ -67,8 +60,6 @@ const trainingProgramSchema = new mongoose.Schema({
     },
     completedDate: Date
   }],
-
-  // Certifications
   certifications: [{
     type: String,
     issuedDate: Date
@@ -76,9 +67,11 @@ const trainingProgramSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+console.log('trainingProgramSchema defined');
 
-// Method to start the program
+console.log('Defining schema methods');
 trainingProgramSchema.methods.startProgram = function() {
+  console.log('Executing startProgram method');
   if (this.status === 'Scheduled') {
     this.status = 'In Progress';
     this.createInitialAssessment();
@@ -87,28 +80,25 @@ trainingProgramSchema.methods.startProgram = function() {
   return false;
 };
 
-// Method to add progress report
 trainingProgramSchema.methods.addProgressReport = function(report) {
+  console.log('Executing addProgressReport method');
   this.progressReports.push({
     date: new Date(),
     report: report.report,
     completionPercentage: report.completionPercentage
   });
-  this.updateAnimalStatus();
 };
 
-// Method to add milestone
 trainingProgramSchema.methods.addMilestone = function(milestone) {
-  const newMilestone = {
+  console.log('Executing addMilestone method');
+  this.milestones.push({
     description: milestone.description,
     targetDate: milestone.targetDate
-  };
-  
-  this.milestones.push(newMilestone);
+  });
 };
 
-// Method to evaluate program progression
 trainingProgramSchema.methods.evaluateProgression = function() {
+  console.log('Executing evaluateProgression method');
   const completedMilestones = this.milestones.filter(m => m.isComplete).length;
   const totalMilestones = this.milestones.length;
   const progressPercentage = (completedMilestones / totalMilestones) * 100;
@@ -117,48 +107,12 @@ trainingProgramSchema.methods.evaluateProgression = function() {
     this.completeProgramEvaluation();
   }
 };
+console.log('Schema methods defined');
 
-// Method to complete program evaluation
-trainingProgramSchema.methods.completeProgramEvaluation = function() {
-  const allMilestonesCompleted = this.milestones.every(m => m.isComplete);
-  
-  if (allMilestonesCompleted) {
-    this.status = 'Completed';
-    this.actualEndDate = new Date();
-    this.issueCertifications();
-  } else {
-    this.status = 'Extended';
-    this.adjustEstimatedEndDate();
-  }
-};
-
-// Method to issue certifications
-trainingProgramSchema.methods.issueCertifications = function() {
-  // Placeholder for certification logic
-  this.certifications.push({
-    type: `${this.type} Completion Certificate`,
-    issuedDate: new Date()
-  });
-};
-
-// Method to adjust estimated end date
-trainingProgramSchema.methods.adjustEstimatedEndDate = function() {
-  // Extend estimated end date by a default period
-  const extensionPeriod = new Date();
-  extensionPeriod.setMonth(extensionPeriod.getMonth() + 1);
-  this.estimatedEndDate = extensionPeriod;
-};
-
-// Method to create initial assessment
-trainingProgramSchema.methods.createInitialAssessment = function() {
-  // Placeholder for initial assessment logic
-  this.progressReports.push({
-    date: new Date(),
-    report: 'Initial program assessment',
-    completionPercentage: 0
-  });
-};
-
+console.log('Creating TrainingProgram model');
 const TrainingProgram = mongoose.model('TrainingProgram', trainingProgramSchema);
+console.log('TrainingProgram model created');
 
+console.log('About to export TrainingProgram model');
 module.exports = TrainingProgram;
+console.log('TrainingProgram model exported');

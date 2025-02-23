@@ -4,11 +4,11 @@ const express = require('express');
 console.log('Express loaded in animal.routes.js');
 
 console.log('About to require animal.controller');
-const AnimalController = require('../controllers/animal.controller');
+const AnimalController = require('../controllers/animal.controller.js');
 console.log('AnimalController loaded');
 
 console.log('About to require validationMiddleware');
-const ValidationMiddleware = require('../middleware/validationMiddleware');
+const ValidationMiddleware = require('../middleware/validationMiddleware.js');
 console.log('ValidationMiddleware loaded');
 
 const router = express.Router();

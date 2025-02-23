@@ -1,13 +1,13 @@
-const RescueAnimal = require('../models/base/rescueAnimal');
-const Dog = require('../models/dog.model');
-const Monkey = require('../models/monkey.model');
-const Bird = require('../models/bird.model');
-const Horse = require('../models/horse.model');
-const TrainingProgram = require('../models/trainingProgram.model');
-const MedicalRecord = require('../models/medicalRecord.model');
-const Trainer = require('../models/trainer.model');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const RescueAnimal = require('../../models/base/rescueAnimal.js');
+const Dog = require('../../models/animal/dog.model.js');
+const Monkey = require('../../models/animal/monkey.model.js');
+const Bird = require('../../models/animal/bird.model.js');
+const Horse = require('../../models/animal/horse.model.js');
+const TrainingProgram = require('../../models/training/trainingProgram.model.js');
+const MedicalRecord = require('../../models/medical/medicalRecord.model.js');
+const Trainer = require('../../models/training/trainer.model.js');
+const ApiError = require('../utils/apiError.js');
+const logger = require('../config/logger.js');
 
 class ReportService {
   // Generate animal status report

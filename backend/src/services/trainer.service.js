@@ -1,7 +1,7 @@
-const Trainer = require('../models/trainer.model');
-const RescueAnimal = require('../models/base/rescueAnimal');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const Trainer = require('../../models/training/trainer.model.js');
+const RescueAnimal = require('../../models/base/rescueAnimal.js');
+const ApiError = require('../utils/apiError.js');
+const logger = require('../config/logger.js');
 
 class TrainerService {
   // Create a new trainer

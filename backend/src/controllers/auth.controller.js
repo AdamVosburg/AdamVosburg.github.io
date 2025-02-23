@@ -1,5 +1,5 @@
-const AuthService = require('../services/auth.service');
-const catchAsync = require('../utils/catchAsync');
+const AuthService = require('../services/auth.service.js');
+const catchAsync = require('../utils/catchAsync.js');
 
 class AuthController {
   // User registration

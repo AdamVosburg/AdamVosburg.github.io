@@ -1,15 +1,20 @@
-const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
+console.log('Starting to load vaccinationSchedule.model.js');
 
+console.log('About to require dependencies');
+const mongoose = require('mongoose');
+console.log('Mongoose loaded');
+
+const { v4: uuidv4 } = require('uuid');
+console.log('uuid loaded');
+console.log('All dependencies loaded');
+
+console.log('Defining vaccinationScheduleSchema');
 const vaccinationScheduleSchema = new mongoose.Schema({
-  // Animal Association
   animalId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'RescueAnimal',
     required: true
   },
-
-  // Vaccination Records
   vaccinations: [{
     type: {
       type: String,
@@ -24,12 +29,9 @@ const vaccinationScheduleSchema = new mongoose.Schema({
       required: true
     }
   }],
-
-  // Schedule Tracking
   nextDueDate: {
     type: Date
   },
-
   overdue: {
     type: Boolean,
     default: false
@@ -37,9 +39,12 @@ const vaccinationScheduleSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+console.log('vaccinationScheduleSchema defined');
 
-// Method to add vaccination
+console.log('Adding schema methods');
+
 vaccinationScheduleSchema.methods.addVaccination = function(vaccine) {
+  console.log('Executing addVaccination method');
   const newVaccination = {
     type: vaccine.type,
     dateGiven: new Date(),
@@ -52,8 +57,8 @@ vaccinationScheduleSchema.methods.addVaccination = function(vaccine) {
   return this.save();
 };
 
-// Method to update next due date
 vaccinationScheduleSchema.methods.updateNextDueDate = function() {
+  console.log('Executing updateNextDueDate method');
   // Find the earliest next due date among all vaccinations
   const earliestNextDue = this.vaccinations.reduce((earliest, vaccination) => {
     return (!earliest || vaccination.nextDueDate < earliest) 
@@ -65,12 +70,18 @@ vaccinationScheduleSchema.methods.updateNextDueDate = function() {
   this.checkOverdueStatus();
 };
 
-// Method to check overdue status
 vaccinationScheduleSchema.methods.checkOverdueStatus = function() {
+  console.log('Executing checkOverdueStatus method');
   const currentDate = new Date();
   this.overdue = this.nextDueDate && currentDate > this.nextDueDate;
 };
 
-const VaccinationSchedule = mongoose.model('VaccinationSchedule', vaccinationScheduleSchema);
+console.log('Schema methods added');
 
+console.log('Creating VaccinationSchedule model');
+const VaccinationSchedule = mongoose.model('VaccinationSchedule', vaccinationScheduleSchema);
+console.log('VaccinationSchedule model created');
+
+console.log('About to export VaccinationSchedule model');
 module.exports = VaccinationSchedule;
+console.log('VaccinationSchedule model exported');
