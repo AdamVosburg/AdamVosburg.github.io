@@ -1,5 +1,5 @@
-const ReportService = require('../services/report.service');
-const catchAsync = require('../utils/catchAsync');
+const ReportService = require('../services/report.service.js');
+const catchAsync = require('../utils/catchAsync.js');
 const fs = require('fs').promises;
 const path = require('path');
 

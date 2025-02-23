@@ -1,15 +1,15 @@
 console.log('Starting to load animal.controller.js');
 
 console.log('About to require animal.service');
-const AnimalService = require('../services/animal.service');
+const AnimalService = require('../services/animal.service.js');
 console.log('AnimalService loaded');
 
 console.log('About to require catchAsync');
-const catchAsync = require('../utils/catchAsync');
+const catchAsync = require('../utils/catchAsync.js');
 console.log('catchAsync loaded');
 
 console.log('About to require apiError');
-const ApiError = require('../utils/apiError');
+const ApiError = require('../utils/apiError.js');
 console.log('ApiError loaded');
 
 console.log('Defining AnimalController class');

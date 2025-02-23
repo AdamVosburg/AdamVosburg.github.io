@@ -1,7 +1,7 @@
-const AuthService = require('../services/auth.service');
-const User = require('../models/user.model');
-const ApiError = require('../utils/apiError');
-const catchAsync = require('../utils/catchAsync');
+const AuthService = require('../services/auth.service.js');
+const User = require('../../models/user.model.js');
+const ApiError = require('../utils/apiError.js');
+const catchAsync = require('../utils/catchAsync.js');
 
 class AuthMiddleware {
   // Authenticate user

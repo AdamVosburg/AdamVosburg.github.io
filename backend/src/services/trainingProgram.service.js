@@ -1,9 +1,9 @@
-const TrainingProgram = require('../models/trainingProgram.model');
-const TrainingSession = require('../models/trainingSession.model');
-const RescueAnimal = require('../models/base/rescueAnimal');
-const Trainer = require('../models/trainer.model');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const TrainingProgram = require('../../models/training/trainingProgram.model.js');
+const TrainingSession = require('../../models/training/trainingSession.model.js');
+const RescueAnimal = require('../../models/base/rescueAnimal.js');
+const Trainer = require('../../models/training/trainer.model.js');
+const ApiError = require('../utils/apiError.js');
+const logger = require('../config/logger.js');
 
 class TrainingProgramService {
   // Create a new training program

@@ -29,7 +29,7 @@ if (checkFileExists(rescueAnimalPath)) {
 }
 
 const models = {};
-const modelFiles = ['dog.model.js', 'monkey.model.js', 'bird.model.js', 'horse.model.js'];
+const modelFiles = ['animal/dog.model.js', 'animal/monkey.model.js', 'animal/bird.model.js', 'animal/horse.model.js'];
 
 modelFiles.forEach(file => {
   const modelName = file.split('.')[0].charAt(0).toUpperCase() + file.split('.')[0].slice(1);

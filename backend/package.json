@@ -16,10 +16,12 @@
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "express": "^4.21.2",
+        "joi": "^17.13.3",
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mongodb": "^6.13.1",
         "mongoose": "^6.13.8",
+        "uuid": "^11.1.0",
         "validator": "^13.6.0",
         "winston": "^3.17.0"
     },

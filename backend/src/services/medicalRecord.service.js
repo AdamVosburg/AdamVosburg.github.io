@@ -1,9 +1,9 @@
-const MedicalRecord = require('../models/medicalRecord.model');
-const Medication = require('../models/medication.model');
-const VaccinationSchedule = require('../models/vaccinationSchedule.model');
-const RescueAnimal = require('../models/base/rescueAnimal');
-const ApiError = require('../utils/apiError');
-const logger = require('../config/logger');
+const MedicalRecord = require('../../models/medical/medicalRecord.model.js');
+const Medication = require('../../models/medical/medication.model.js');
+const VaccinationSchedule = require('../../models/medical/vaccinationSchedule.model.js');
+const RescueAnimal = require('../../models/base/rescueAnimal.js');
+const ApiError = require('../utils/apiError.js');
+const logger = require('../config/logger.js');
 
 class MedicalRecordService {
   // Create a new medical record
