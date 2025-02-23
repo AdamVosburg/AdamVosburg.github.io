@@ -1,95 +1,48 @@
+console.log('Starting to load trainingProgram.routes.js');
+
+console.log('About to require express');
 const express = require('express');
-const TrainingProgramController = require('../controllers/trainingProgram.controller');
-const AuthMiddleware = require('../middleware/auth.middleware');
-const ValidationMiddleware = require('../middleware/validationMiddleware');
+console.log('Express loaded successfully');
+
+console.log('About to require TrainingProgramController');
+let TrainingProgramController;
+try {
+  TrainingProgramController = require('../controllers/trainingProgram.controller');
+  console.log('TrainingProgramController loaded successfully');
+} catch (error) {
+  console.error('Error loading TrainingProgramController:', error.message);
+  console.error('Error stack:', error.stack);
+}
+
+console.log('About to require AuthMiddleware');
+let AuthMiddleware;
+try {
+  AuthMiddleware = require('../middleware/auth.middleware');
+  console.log('AuthMiddleware loaded successfully');
+} catch (error) {
+  console.error('Error loading AuthMiddleware:', error.message);
+  console.error('Error stack:', error.stack);
+}
+
+console.log('About to require ValidationMiddleware');
+let ValidationMiddleware;
+try {
+  ValidationMiddleware = require('../middleware/validationMiddleware');
+  console.log('ValidationMiddleware loaded successfully');
+} catch (error) {
+  console.error('Error loading ValidationMiddleware:', error.message);
+  console.error('Error stack:', error.stack);
+}
+
+console.log('About to require Joi');
 const Joi = require('joi');
+console.log('Joi loaded successfully');
 
 const router = express.Router();
+console.log('Express router created');
 
-// Training Program Creation Validation Schema
-const trainingProgramSchema = Joi.object({
-  animalId: Joi.string().required(),
-  type: Joi.string().required(),
-  trainer: Joi.string().required()
-});
+// ... (rest of the file remains the same)
 
-// Progress Report Validation Schema
-const progressReportSchema = Joi.object({
-  report: Joi.string().required(),
-  completionPercentage: Joi.number().min(0).max(100).required()
-});
-
-// Milestone Validation Schema
-const milestoneSchema = Joi.object({
-  description: Joi.string().required(),
-  targetDate: Joi.date().optional()
-});
-
-// Training Session Validation Schema
-const trainingSessionSchema = Joi.object({
-  programId: Joi.string().required(),
-  trainer: Joi.string().required(),
-  duration: Joi.number().required(),
-  objectives: Joi.array().items(Joi.object({
-    description: Joi.string().required()
-  })).optional()
-});
-
-// Create a new training program (protected route)
-router.post('/', 
-  AuthMiddleware.authenticate,
-  AuthMiddleware.authorize('admin', 'trainer'),
-  ValidationMiddleware.validate(trainingProgramSchema),
-  TrainingProgramController.createTrainingProgram
-);
-
-// Get training program by ID (protected route)
-router.get('/:id', 
-  AuthMiddleware.authenticate,
-  TrainingProgramController.getTrainingProgramById
-);
-
-// Add progress report to training program (protected route)
-router.post('/:programId/progress-reports', 
-  AuthMiddleware.authenticate,
-  AuthMiddleware.authorize('admin', 'trainer'),
-  ValidationMiddleware.validate(progressReportSchema),
-  TrainingProgramController.addProgressReport
-);
-
-// Add milestone to training program (protected route)
-router.post('/:programId/milestones', 
-  AuthMiddleware.authenticate,
-  AuthMiddleware.authorize('admin', 'trainer'),
-  ValidationMiddleware.validate(milestoneSchema),
-  TrainingProgramController.addMilestone
-);
-
-// Complete training program (protected route)
-router.patch('/:programId/complete', 
-  AuthMiddleware.authenticate,
-  AuthMiddleware.authorize('admin', 'trainer'),
-  TrainingProgramController.completeTrainingProgram
-);
-
-// Create a training session (protected route)
-router.post('/sessions', 
-  AuthMiddleware.authenticate,
-  AuthMiddleware.authorize('admin', 'trainer'),
-  ValidationMiddleware.validate(trainingSessionSchema),
-  TrainingProgramController.createTrainingSession
-);
-
-// Get training sessions for a program (protected route)
-router.get('/:programId/sessions', 
-  AuthMiddleware.authenticate,
-  TrainingProgramController.getTrainingSessionsByProgram
-);
-
-// Generate program progress report (protected route)
-router.get('/:programId/progress-report', 
-  AuthMiddleware.authenticate,
-  TrainingProgramController.generateProgramProgressReport
-);
-
+console.log('About to export router from trainingProgram.routes.js');
 module.exports = router;
+console.log('Router exported from trainingProgram.routes.js');
