@@ -1,14 +1,16 @@
-console.log('Starting to load medication.model.js');
+/**
+ * Medication Model
+ * @module models/medical/medication
+ * @description Manages medication records for rescue animals
+ */
 
-console.log('About to require dependencies');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded');
-
 const { v4: uuidv4 } = require('uuid');
-console.log('uuid loaded');
-console.log('All dependencies loaded');
 
-console.log('Defining medicationSchema');
+/**
+ * Medication schema definition
+ * @type {mongoose.Schema}
+ */
 const medicationSchema = new mongoose.Schema({
   medicationId: {
     type: String,
@@ -53,46 +55,45 @@ const medicationSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('medicationSchema defined');
 
-console.log('Adding schema methods');
-
+/**
+ * Checks if medication is active based on current date vs. end date
+ * @returns {Boolean} Whether the medication is active
+ */
 medicationSchema.methods.checkMedicationStatus = function() {
-  console.log('Executing checkMedicationStatus method');
   const currentDate = new Date();
   
   if (currentDate > this.endDate) {
     this.active = false;
-    console.log('Medication marked as inactive due to end date');
   }
   
   return this.active;
 };
 
+/**
+ * Extends the medication end date
+ * @param {Date|String} newEndDate - New end date for the medication
+ * @returns {Promise<Document>} Updated medication document
+ * @throws {Error} If the new end date is invalid (in the past)
+ */
 medicationSchema.methods.extendMedication = function(newEndDate) {
-  console.log('Executing extendMedication method');
   try {
     if (new Date(newEndDate) > new Date()) {
-      console.log(`Extending medication end date to: ${newEndDate}`);
       this.endDate = newEndDate;
       this.active = true;
       return this.save();
     }
     
-    console.error('Invalid end date provided');
     throw new Error('Invalid end date');
   } catch (error) {
-    console.error('Error extending medication:', error.message);
     throw error;
   }
 };
 
-console.log('Schema methods added');
-
-console.log('Creating Medication model');
+/**
+ * Medication model
+ * @type {mongoose.Model}
+ */
 const Medication = mongoose.model('Medication', medicationSchema);
-console.log('Medication model created');
 
-console.log('About to export Medication model');
 module.exports = Medication;
-console.log('Medication model exported');

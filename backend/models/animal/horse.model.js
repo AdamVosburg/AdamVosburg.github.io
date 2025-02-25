@@ -68,6 +68,40 @@ const horseSchema = new mongoose.Schema({
  * Initializes horse training parameters and identifies specialization
  * @returns {Promise<Document>} Updated horse document
  */
+/**
+ * Determines advanced training needs based on horse's attributes
+ * @returns {Array<String>} List of advanced training needs
+ */
+horseSchema.methods.determineAdvancedTrainingNeeds = function() {
+  const advancedNeeds = [];
+  
+  if (this.temperament < 3) {
+    advancedNeeds.push('Temperament improvement');
+  }
+  
+  if (this.groundManners < 3) {
+    advancedNeeds.push('Ground manners training');
+  }
+  
+  if (this.trailerLoading < 3) {
+    advancedNeeds.push('Trailer loading practice');
+  }
+  
+  if (this.arenaBehavior < 3) {
+    advancedNeeds.push('Arena confidence building');
+  }
+  
+  if (this.ridingSafe) {
+    advancedNeeds.push('Rider habituation');
+  }
+  
+  return advancedNeeds;
+};
+
+/**
+ * Initializes horse training parameters and identifies specialization
+ * @returns {Promise<Document>} Updated horse document
+ */
 horseSchema.methods.initializeHorseTraining = function() {
   const trainingRequirements = {
     basicTraining: [
