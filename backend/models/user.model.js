@@ -1,14 +1,16 @@
-console.log('Starting to load user.model.js');
+/**
+ * User Model
+ * @module models/user
+ * @description Manages user accounts and authentication
+ */
 
-console.log('About to require mongoose');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded successfully');
-
-console.log('About to require bcryptjs');
 const bcrypt = require('bcryptjs');
-console.log('bcryptjs loaded successfully');
 
-console.log('Defining userSchema');
+/**
+ * User schema definition
+ * @type {mongoose.Schema}
+ */
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -56,9 +58,11 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('userSchema defined');
 
-console.log('Setting up password hashing middleware');
+/**
+ * Pre-save middleware to hash password before saving
+ * Only hashes the password if it has been modified
+ */
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
 
@@ -70,22 +74,28 @@ userSchema.pre('save', async function(next) {
     next(error);
   }
 });
-console.log('Password hashing middleware set up');
 
-console.log('Defining schema methods');
+/**
+ * Validates a password against the hashed password stored in the database
+ * @param {String} candidatePassword - Password to validate
+ * @returns {Promise<Boolean>} Whether the password is valid
+ */
 userSchema.methods.isValidPassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+/**
+ * Gets the user's full name by combining first and last name
+ * @returns {String} The user's full name
+ */
 userSchema.methods.getFullName = function() {
   return `${this.firstName} ${this.lastName}`;
 };
-console.log('Schema methods defined');
 
-console.log('Creating User model');
+/**
+ * User model
+ * @type {mongoose.Model}
+ */
 const User = mongoose.model('User', userSchema);
-console.log('User model created');
 
-console.log('About to export User model');
 module.exports = User;
-console.log('User model exported');

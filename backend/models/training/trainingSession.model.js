@@ -1,14 +1,16 @@
-console.log('Starting to load trainingSession.model.js');
+/**
+ * Training Session Model
+ * @module models/training/trainingSession
+ * @description Manages individual training sessions within training programs
+ */
 
-console.log('About to require dependencies');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded');
-
 const { v4: uuidv4 } = require('uuid');
-console.log('uuid loaded');
-console.log('All dependencies loaded');
 
-console.log('Defining trainingSessionSchema');
+/**
+ * Training Session schema definition
+ * @type {mongoose.Schema}
+ */
 const trainingSessionSchema = new mongoose.Schema({
   sessionId: {
     type: String,
@@ -56,20 +58,24 @@ const trainingSessionSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('trainingSessionSchema defined');
 
-console.log('Adding schema methods');
-
+/**
+ * Adds a training objective to the session
+ * @param {String} objective - Description of the objective
+ */
 trainingSessionSchema.methods.addObjective = function(objective) {
-  console.log('Executing addObjective method');
   this.objectives.push({
     description: objective,
     isComplete: false
   });
 };
 
+/**
+ * Marks an objective as completed
+ * @param {String} objectiveDescription - Description of the objective to complete
+ * @returns {Boolean} Whether the objective was found and completed
+ */
 trainingSessionSchema.methods.completeObjective = function(objectiveDescription) {
-  console.log('Executing completeObjective method');
   const objective = this.objectives.find(
     obj => obj.description === objectiveDescription
   );
@@ -85,16 +91,23 @@ trainingSessionSchema.methods.completeObjective = function(objectiveDescription)
   return false;
 };
 
+/**
+ * Adds notes to the training session
+ * @param {String} newNotes - Notes to append
+ */
 trainingSessionSchema.methods.addNotes = function(newNotes) {
-  console.log('Executing addNotes method');
   this.notes += `\n${newNotes}`;
 };
 
+/**
+ * Generates a summary report of the training session
+ * @returns {Object} Session report with completion statistics
+ */
 trainingSessionSchema.methods.generateSessionReport = function() {
-  console.log('Executing generateSessionReport method');
   const completedObjectivesCount = this.objectives.filter(obj => obj.isComplete).length;
   const totalObjectivesCount = this.objectives.length;
-  const completionPercentage = (completedObjectivesCount / totalObjectivesCount) * 100;
+  const completionPercentage = totalObjectivesCount > 0 ? 
+    (completedObjectivesCount / totalObjectivesCount) * 100 : 0;
 
   return {
     sessionId: this.sessionId,
@@ -108,12 +121,23 @@ trainingSessionSchema.methods.generateSessionReport = function() {
   };
 };
 
-console.log('Schema methods added');
+/**
+ * Adds a goal for the next training session
+ * @param {Object} goal - Goal details
+ * @param {String} goal.description - Description of the goal
+ * @param {Date} [goal.targetDate] - Target date for achieving the goal
+ */
+trainingSessionSchema.methods.addNextSessionGoal = function(goal) {
+  this.nextSessionGoals.push({
+    description: goal.description,
+    targetDate: goal.targetDate || null
+  });
+};
 
-console.log('Creating TrainingSession model');
+/**
+ * TrainingSession model
+ * @type {mongoose.Model}
+ */
 const TrainingSession = mongoose.model('TrainingSession', trainingSessionSchema);
-console.log('TrainingSession model created');
 
-console.log('About to export TrainingSession model');
 module.exports = TrainingSession;
-console.log('TrainingSession model exported');

@@ -1,14 +1,16 @@
-console.log('Starting to load trainer.model.js');
+/**
+ * Trainer Model
+ * @module models/training/trainer
+ * @description Manages trainer profiles and capabilities
+ */
 
-console.log('About to require mongoose');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded successfully');
-
-console.log('About to require uuid');
 const { v4: uuidv4 } = require('uuid');
-console.log('uuid loaded successfully');
 
-console.log('Defining trainerSchema');
+/**
+ * Trainer schema definition
+ * @type {mongoose.Schema}
+ */
 const trainerSchema = new mongoose.Schema({
   trainerId: {
     type: String,
@@ -60,9 +62,12 @@ const trainerSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('trainerSchema defined');
 
-console.log('Defining schema methods');
+/**
+ * Adds a specialty to the trainer's profile
+ * @param {String} specialty - The specialty to add
+ * @returns {Promise<Document>|Object} Updated trainer document or unchanged trainer if specialty exists
+ */
 trainerSchema.methods.addSpecialty = function(specialty) {
   if (!this.specialties.includes(specialty)) {
     this.specialties.push(specialty);
@@ -71,6 +76,13 @@ trainerSchema.methods.addSpecialty = function(specialty) {
   return this;
 };
 
+/**
+ * Adds a certification to the trainer's profile
+ * @param {Object} cert - Certification details
+ * @param {String} cert.type - Type of certification
+ * @param {Date} cert.expiryDate - Date when certification expires
+ * @returns {Promise<Document>} Updated trainer document
+ */
 trainerSchema.methods.addCertification = function(cert) {
   const newCert = {
     certType: cert.type,
@@ -81,6 +93,12 @@ trainerSchema.methods.addCertification = function(cert) {
   return this.save();
 };
 
+/**
+ * Assigns an animal to the trainer
+ * @param {mongoose.Types.ObjectId} animalId - ID of the animal to assign
+ * @returns {Promise<Document>} Updated trainer document
+ * @throws {Error} If trainer cannot accept more animals
+ */
 trainerSchema.methods.assignAnimal = function(animalId) {
   if (this.canAcceptAnimal()) {
     this.assignedAnimals.push(animalId);
@@ -89,15 +107,18 @@ trainerSchema.methods.assignAnimal = function(animalId) {
   throw new Error('Cannot accept more animals');
 };
 
+/**
+ * Checks if trainer can accept another animal assignment
+ * @returns {Boolean} Whether trainer can accept more animals
+ */
 trainerSchema.methods.canAcceptAnimal = function() {
   return this.assignedAnimals.length < this.workloadCapacity && this.activeStatus;
 };
-console.log('Schema methods defined');
 
-console.log('Creating Trainer model');
+/**
+ * Trainer model
+ * @type {mongoose.Model}
+ */
 const Trainer = mongoose.model('Trainer', trainerSchema);
-console.log('Trainer model created');
 
-console.log('About to export Trainer model');
 module.exports = Trainer;
-console.log('Trainer model exported');

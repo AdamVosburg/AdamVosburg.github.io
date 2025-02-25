@@ -1,28 +1,34 @@
-console.log('Starting to load models/index.js');
+/**
+ * Models Index
+ * @module models/index
+ * @description Centralizes and exports all application models
+ */
 
 const path = require('path');
 const fs = require('fs');
 
-// Helper function to safely require models
+/**
+ * Helper function to safely require models with error handling
+ * @param {String} modelPath - Path to the model file
+ * @param {String} modelName - Name of the model for logging
+ * @returns {Object} The required model
+ * @throws {Error} If model loading fails
+ * @private
+ */
 const safeRequire = (modelPath, modelName) => {
   try {
-    console.log(`About to require ${modelName}`);
     const model = require(modelPath);
-    console.log(`${modelName} loaded successfully`);
     return model;
   } catch (error) {
-    console.error(`Error loading ${modelName}:`, error.message);
     throw error;
   }
 };
 
 // Base Models
-console.log('Loading base models...');
 const RescueAnimal = safeRequire('./base/rescueAnimal', 'RescueAnimal');
 const User = safeRequire('./user.model', 'User');
 
 // Animal Models
-console.log('Loading animal models...');
 const animalModels = {
   Bird: safeRequire('./animal/bird.model', 'Bird'),
   Dog: safeRequire('./animal/dog.model', 'Dog'),
@@ -31,7 +37,6 @@ const animalModels = {
 };
 
 // Medical Models
-console.log('Loading medical models...');
 const medicalModels = {
   MedicalRecord: safeRequire('./medical/medicalRecord.model', 'MedicalRecord'),
   Medication: safeRequire('./medical/medication.model', 'Medication'),
@@ -39,15 +44,16 @@ const medicalModels = {
 };
 
 // Training Models
-console.log('Loading training models...');
 const trainingModels = {
   Trainer: safeRequire('./training/trainer.model', 'Trainer'),
   TrainingProgram: safeRequire('./training/trainingProgram.model', 'TrainingProgram'),
   TrainingSession: safeRequire('./training/trainingSession.model', 'TrainingSession')
 };
 
-// Combine all models
-console.log('Combining all models for export...');
+/**
+ * Combined models object with all application models
+ * @type {Object}
+ */
 const models = {
   // Base Models
   RescueAnimal,
@@ -64,14 +70,10 @@ const models = {
 };
 
 // Verify all models are loaded
-console.log('Verifying models...');
 Object.entries(models).forEach(([name, model]) => {
   if (!model) {
     throw new Error(`Model ${name} failed to load properly`);
   }
 });
 
-console.log('All models verified successfully');
-console.log('About to export models');
 module.exports = models;
-console.log('Models exported successfully');
