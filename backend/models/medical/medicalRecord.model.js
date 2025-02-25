@@ -1,14 +1,16 @@
-console.log('Starting to load medicalRecord.model.js');
+/**
+ * Medical Record Model
+ * @module models/medical/medicalRecord
+ * @description Manages medical records for rescue animals
+ */
 
-console.log('About to require mongoose');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded successfully');
-
-console.log('About to require uuid');
 const { v4: uuidv4 } = require('uuid');
-console.log('uuid loaded successfully');
 
-console.log('Defining medicalRecordSchema');
+/**
+ * Medical Record schema definition
+ * @type {mongoose.Schema}
+ */
 const medicalRecordSchema = new mongoose.Schema({
   recordId: {
     type: String,
@@ -59,11 +61,17 @@ const medicalRecordSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('medicalRecordSchema defined');
 
-console.log('Defining schema methods');
+/**
+ * Adds examination data to the medical record
+ * @param {Object} examData - Data from the examination
+ * @param {String} examData.diagnosis - Diagnosis from examination
+ * @param {String} examData.treatment - Treatment plan
+ * @param {Boolean} [examData.followUp] - Whether follow-up is needed
+ * @param {Date} [examData.followUpDate] - Date for follow-up appointment
+ * @returns {Promise<Document>} Updated medical record
+ */
 medicalRecordSchema.methods.addExamRecord = function(examData) {
-  console.log('Executing addExamRecord method');
   this.recordType = 'EXAM';
   this.diagnosis = examData.diagnosis;
   this.treatment = examData.treatment;
@@ -76,8 +84,14 @@ medicalRecordSchema.methods.addExamRecord = function(examData) {
   return this.save();
 };
 
+/**
+ * Adds vaccination data to the medical record
+ * @param {Object} vaccinationData - Vaccination details
+ * @param {String} vaccinationData.vacType - Type of vaccination
+ * @param {Date} vaccinationData.nextDate - Date for next vaccination
+ * @returns {Promise<Document>} Updated medical record
+ */
 medicalRecordSchema.methods.addVaccination = function(vaccinationData) {
-  console.log('Executing addVaccination method');
   this.recordType = 'VACCINATION';
   this.treatment = vaccinationData.vacType;
   this.followUpNeeded = true;
@@ -86,19 +100,22 @@ medicalRecordSchema.methods.addVaccination = function(vaccinationData) {
   return this.save();
 };
 
+/**
+ * Adds a medication to the medical record
+ * @param {mongoose.Types.ObjectId} medicationId - ID of the medication
+ * @returns {Promise<Document>} Updated medical record
+ */
 medicalRecordSchema.methods.addMedication = function(medicationId) {
-  console.log('Executing addMedication method');
   if (!this.medications.includes(medicationId)) {
     this.medications.push(medicationId);
   }
   return this.save();
 };
-console.log('Schema methods defined');
 
-console.log('Creating MedicalRecord model');
+/**
+ * MedicalRecord model
+ * @type {mongoose.Model}
+ */
 const MedicalRecord = mongoose.model('MedicalRecord', medicalRecordSchema);
-console.log('MedicalRecord model created');
 
-console.log('About to export MedicalRecord model');
 module.exports = MedicalRecord;
-console.log('MedicalRecord model exported');
