@@ -1,14 +1,16 @@
-console.log('Starting to load trainingProgram.model.js');
+/**
+ * Training Program Model
+ * @module models/training/trainingProgram
+ * @description Manages training programs for rescue animals
+ */
 
-console.log('About to require mongoose');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded successfully');
-
-console.log('About to require uuid');
 const { v4: uuidv4 } = require('uuid');
-console.log('uuid loaded successfully');
 
-console.log('Defining trainingProgramSchema');
+/**
+ * Training Program schema definition
+ * @type {mongoose.Schema}
+ */
 const trainingProgramSchema = new mongoose.Schema({
   programId: {
     type: String,
@@ -67,11 +69,12 @@ const trainingProgramSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-console.log('trainingProgramSchema defined');
 
-console.log('Defining schema methods');
+/**
+ * Starts the training program
+ * @returns {Boolean} Whether the program was successfully started
+ */
 trainingProgramSchema.methods.startProgram = function() {
-  console.log('Executing startProgram method');
   if (this.status === 'Scheduled') {
     this.status = 'In Progress';
     this.createInitialAssessment();
@@ -80,8 +83,28 @@ trainingProgramSchema.methods.startProgram = function() {
   return false;
 };
 
+/**
+ * Creates initial assessment for the program
+ * This is called automatically when the program starts
+ * @private
+ */
+trainingProgramSchema.methods.createInitialAssessment = function() {
+  // Implementation not provided in original code
+  // This would typically create the first progress report
+  this.progressReports.push({
+    date: new Date(),
+    report: "Initial assessment completed",
+    completionPercentage: 0
+  });
+};
+
+/**
+ * Adds a progress report to the training program
+ * @param {Object} report - Progress report details
+ * @param {String} report.report - Report content
+ * @param {Number} report.completionPercentage - Percentage of program completed
+ */
 trainingProgramSchema.methods.addProgressReport = function(report) {
-  console.log('Executing addProgressReport method');
   this.progressReports.push({
     date: new Date(),
     report: report.report,
@@ -89,16 +112,24 @@ trainingProgramSchema.methods.addProgressReport = function(report) {
   });
 };
 
+/**
+ * Adds a milestone to the training program
+ * @param {Object} milestone - Milestone details
+ * @param {String} milestone.description - Description of the milestone
+ * @param {Date} milestone.targetDate - Target date for completion
+ */
 trainingProgramSchema.methods.addMilestone = function(milestone) {
-  console.log('Executing addMilestone method');
   this.milestones.push({
     description: milestone.description,
     targetDate: milestone.targetDate
   });
 };
 
+/**
+ * Evaluates program progression based on completed milestones
+ * Triggers program completion if all milestones are complete
+ */
 trainingProgramSchema.methods.evaluateProgression = function() {
-  console.log('Executing evaluateProgression method');
   const completedMilestones = this.milestones.filter(m => m.isComplete).length;
   const totalMilestones = this.milestones.length;
   const progressPercentage = (completedMilestones / totalMilestones) * 100;
@@ -107,12 +138,22 @@ trainingProgramSchema.methods.evaluateProgression = function() {
     this.completeProgramEvaluation();
   }
 };
-console.log('Schema methods defined');
 
-console.log('Creating TrainingProgram model');
+/**
+ * Completes the program evaluation process
+ * @private
+ */
+trainingProgramSchema.methods.completeProgramEvaluation = function() {
+  // Implementation not provided in original code
+  // This would typically finalize the program
+  this.status = 'Completed';
+  this.actualEndDate = new Date();
+};
+
+/**
+ * TrainingProgram model
+ * @type {mongoose.Model}
+ */
 const TrainingProgram = mongoose.model('TrainingProgram', trainingProgramSchema);
-console.log('TrainingProgram model created');
 
-console.log('About to export TrainingProgram model');
 module.exports = TrainingProgram;
-console.log('TrainingProgram model exported');
