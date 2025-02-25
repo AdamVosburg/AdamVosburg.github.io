@@ -1,3 +1,9 @@
+/**
+ * Medical Record Service
+ * @module services/medicalRecord
+ * @description Provides business logic for medical record management
+ */
+
 const MedicalRecord = require('../../models/medical/medicalRecord.model.js');
 const Medication = require('../../models/medical/medication.model.js');
 const VaccinationSchedule = require('../../models/medical/vaccinationSchedule.model.js');
@@ -5,8 +11,20 @@ const RescueAnimal = require('../../models/base/rescueAnimal.js');
 const ApiError = require('../utils/apiError.js');
 const logger = require('../config/logger.js');
 
+/**
+ * Service class for medical record operations
+ * @class MedicalRecordService
+ */
 class MedicalRecordService {
-  // Create a new medical record
+  /**
+   * Create a new medical record
+   * @static
+   * @async
+   * @param {Object} recordData - Medical record data
+   * @param {string} recordData.animalId - ID of the animal
+   * @returns {Promise<Document>} Created medical record
+   * @throws {ApiError} If animal is not found or creation fails
+   */
   static async createMedicalRecord(recordData) {
     try {
       // Validate animal exists
@@ -29,7 +47,14 @@ class MedicalRecordService {
     }
   }
 
-  // Get medical record by ID
+  /**
+   * Get medical record by ID
+   * @static
+   * @async
+   * @param {string} recordId - Medical record ID
+   * @returns {Promise<Document>} Medical record document
+   * @throws {ApiError} If medical record is not found
+   */
   static async getMedicalRecordById(recordId) {
     const medicalRecord = await MedicalRecord.findById(recordId)
       .populate('animalId')
@@ -43,7 +68,14 @@ class MedicalRecordService {
     return medicalRecord;
   }
 
-  // Add exam record
+  /**
+   * Add exam record
+   * @static
+   * @async
+   * @param {Object} examData - Exam data
+   * @returns {Promise<Document>} Updated medical record
+   * @throws {ApiError} If creation fails
+   */
   static async addExamRecord(examData) {
     const medicalRecord = await this.createMedicalRecord({
       ...examData,
@@ -53,7 +85,17 @@ class MedicalRecordService {
     return medicalRecord.addExamRecord(examData);
   }
 
-  // Add vaccination record
+  /**
+   * Add vaccination record
+   * @static
+   * @async
+   * @param {Object} vaccinationData - Vaccination data
+   * @param {string} vaccinationData.animalId - Animal ID
+   * @param {string} vaccinationData.vacType - Vaccination type
+   * @param {Date} vaccinationData.nextDate - Next vaccination date
+   * @returns {Promise<Document>} Updated medical record
+   * @throws {ApiError} If creation fails
+   */
   static async addVaccination(vaccinationData) {
     // Create medical record
     const medicalRecord = await this.createMedicalRecord({
@@ -80,7 +122,15 @@ class MedicalRecordService {
     return medicalRecord.addVaccination(vaccinationData);
   }
 
-  // Add medication to medical record
+  /**
+   * Add medication to medical record
+   * @static
+   * @async
+   * @param {string} recordId - Medical record ID
+   * @param {Object} medicationData - Medication data
+   * @returns {Promise<Document>} Created medication
+   * @throws {ApiError} If creation fails
+   */
   static async addMedication(recordId, medicationData) {
     try {
       // Create medication
@@ -98,14 +148,26 @@ class MedicalRecordService {
     }
   }
 
-  // Get medical records for an animal
+  /**
+   * Get medical records for an animal
+   * @static
+   * @async
+   * @param {string} animalId - Animal ID
+   * @returns {Promise<Array<Document>>} Array of medical records
+   */
   static async getMedicalRecordsByAnimal(animalId) {
     return MedicalRecord.find({ animalId })
       .populate('veterinarian')
       .populate('medications');
   }
 
-  // Generate comprehensive medical report
+  /**
+   * Generate comprehensive medical report
+   * @static
+   * @async
+   * @param {string} animalId - Animal ID
+   * @returns {Promise<Object>} Medical report data
+   */
   static async generateMedicalReport(animalId) {
     const medicalRecords = await this.getMedicalRecordsByAnimal(animalId);
     const vaccinationSchedule = await VaccinationSchedule.findOne({ animalId });
@@ -120,7 +182,14 @@ class MedicalRecordService {
     };
   }
 
-  // Update follow-up status for a medical record
+  /**
+   * Update follow-up status for a medical record
+   * @static
+   * @async
+   * @param {string} recordId - Medical record ID
+   * @returns {Promise<Document>} Updated medical record
+   * @throws {ApiError} If medical record is not found
+   */
   static async updateFollowUpStatus(recordId) {
     const medicalRecord = await this.getMedicalRecordById(recordId);
     return medicalRecord.updateFollowUpStatus();

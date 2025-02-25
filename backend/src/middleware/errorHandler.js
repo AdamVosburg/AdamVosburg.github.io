@@ -1,6 +1,21 @@
+/**
+ * Error Handler Middleware
+ * @module middleware/errorHandler
+ * @description Centralized error handling middleware for the application
+ */
+
 const logger = require('../config/logger.js');
 const ApiError = require('../utils/apiError.js');
 
+/**
+ * Global error handler middleware
+ * @function errorHandler
+ * @param {Error|ApiError} err - Error object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Object} JSON response with error details
+ */
 const errorHandler = (err, req, res, next) => {
   let error = err;
 

@@ -1,3 +1,9 @@
+/**
+ * Report Service
+ * @module services/report
+ * @description Provides business logic for report generation
+ */
+
 const RescueAnimal = require('../../models/base/rescueAnimal.js');
 const Dog = require('../../models/animal/dog.model.js');
 const Monkey = require('../../models/animal/monkey.model.js');
@@ -9,8 +15,19 @@ const Trainer = require('../../models/training/trainer.model.js');
 const ApiError = require('../utils/apiError.js');
 const logger = require('../config/logger.js');
 
+/**
+ * Service class for report generation operations
+ * @class ReportService
+ */
 class ReportService {
-  // Generate animal status report
+  /**
+   * Generate animal status report
+   * @static
+   * @async
+   * @param {string} animalId - Animal ID
+   * @returns {Promise<Object>} Animal status report
+   * @throws {ApiError} If animal is not found
+   */
   static async generateAnimalStatusReport(animalId) {
     const animal = await RescueAnimal.findById(animalId)
       .populate('medicalRecords')
@@ -43,7 +60,15 @@ class ReportService {
     };
   }
 
-  // Generate training report
+  /**
+   * Generate training report
+   * @static
+   * @async
+   * @param {Object} dateRange - Date range for the report
+   * @param {Date} dateRange.startDate - Start date
+   * @param {Date} dateRange.endDate - End date
+   * @returns {Promise<Object>} Training report
+   */
   static async generateTrainingReport(dateRange) {
     const { startDate, endDate } = dateRange;
 
@@ -80,7 +105,14 @@ class ReportService {
     };
   }
 
-  // Generate medical report
+  /**
+   * Generate medical report
+   * @static
+   * @async
+   * @param {string} animalId - Animal ID
+   * @returns {Promise<Object>} Medical report
+   * @throws {ApiError} If no medical records are found
+   */
   static async generateMedicalReport(animalId) {
     const medicalRecords = await MedicalRecord.find({ animalId })
       .populate('medications')
@@ -109,7 +141,14 @@ class ReportService {
     };
   }
 
-  // Generate staff report
+  /**
+   * Generate staff report
+   * @static
+   * @async
+   * @param {string} staffId - Staff (trainer) ID
+   * @returns {Promise<Object>} Staff report
+   * @throws {ApiError} If trainer is not found
+   */
   static async generateStaffReport(staffId) {
     const trainer = await Trainer.findById(staffId)
       .populate('assignedAnimals');
@@ -136,7 +175,19 @@ class ReportService {
     };
   }
 
-  // Custom report builder
+  /**
+   * Build a custom report
+   * @static
+   * @async
+   * @param {Object} options - Report options
+   * @param {string} options.reportType - Type of report to build
+   * @param {Object} [options.filters={}] - Report filters
+   * @param {Array<string>} [options.selectedFields=[]] - Fields to include
+   * @param {Object} [options.groupingCriteria] - Grouping criteria
+   * @param {Array<Object>} [options.calculations=[]] - Calculations to perform
+   * @returns {Promise<Array>} Custom report results
+   * @throws {ApiError} If report type is invalid
+   */
   static async buildCustomReport(options) {
     const { 
       reportType, 
@@ -189,7 +240,17 @@ class ReportService {
     return processedResults;
   }
 
-  // Helper method for calculations
+  /**
+   * Helper method for calculations
+   * @static
+   * @private
+   * @param {Object} data - Data to perform calculation on
+   * @param {Object} calculation - Calculation to perform
+   * @param {string} calculation.type - Type of calculation
+   * @param {string} calculation.field - Field to calculate on
+   * @returns {number} Calculation result
+   * @throws {Error} If calculation type is unsupported
+   */
   static performCalculation(data, calculation) {
     switch (calculation.type) {
       case 'sum':
