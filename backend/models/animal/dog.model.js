@@ -1,20 +1,17 @@
-console.log('Starting to load dog.model.js');
+/**
+ * Dog Model - Mongoose discriminator for RescueAnimal
+ * @module models/dog
+ */
 
-console.log('About to require dependencies');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded');
-
 const RescueAnimal = require('../base/rescueAnimal');
-console.log('RescueAnimal model loaded');
-
 const TrainingProgram = require('../training/trainingProgram.model');
-console.log('TrainingProgram model loaded');
-
 const MedicalRecord = require('../medical/medicalRecord.model');
-console.log('MedicalRecord model loaded');
-console.log('All dependencies loaded');
 
-console.log('Defining dogSchema');
+/**
+ * Dog schema definition
+ * @type {mongoose.Schema}
+ */
 const dogSchema = new mongoose.Schema({
   breed: {
     type: String,
@@ -35,17 +32,21 @@ const dogSchema = new mongoose.Schema({
     type: String
   }]
 });
-console.log('dogSchema defined');
 
-console.log('Adding schema methods');
-
+/**
+ * Returns dog's specializations
+ * @returns {Array<String>} List of specializations
+ */
 dogSchema.methods.getDogSpecializations = function() {
-  console.log('Executing getDogSpecializations method');
   return this.specializations;
 };
 
+/**
+ * Adds a specialization to the dog's profile if not already present
+ * @param {String} specialization - The specialization to add
+ * @returns {Promise<Document>} Updated dog document
+ */
 dogSchema.methods.addSpecialization = function(specialization) {
-  console.log('Executing addSpecialization method');
   if (!this.specializations.includes(specialization)) {
     this.specializations.push(specialization);
     return this.save();
@@ -53,8 +54,12 @@ dogSchema.methods.addSpecialization = function(specialization) {
   return this;
 };
 
+/**
+ * Creates and initializes a medical record for the dog
+ * @returns {Promise<Document>} Updated dog document with medical record reference
+ * @throws {Error} If medical record creation fails
+ */
 dogSchema.methods.initializeMedicalRecord = async function() {
-  console.log('Executing initializeMedicalRecord method');
   try {
     const medicalRecord = new MedicalRecord({
       animalId: this._id,
@@ -65,18 +70,21 @@ dogSchema.methods.initializeMedicalRecord = async function() {
     });
 
     await medicalRecord.save();
-    console.log('Medical record created successfully');
     
     this.medicalRecords.push(medicalRecord._id);
     return this.save();
   } catch (error) {
-    console.error('Error initializing medical record:', error);
     throw error;
   }
 };
 
+/**
+ * Creates and initializes a training program for the dog
+ * @param {Object} trainer - The trainer object with _id
+ * @returns {Promise<Document>} Updated dog document with training program reference
+ * @throws {Error} If training program creation fails
+ */
 dogSchema.methods.initializeTrainingProgram = async function(trainer) {
-  console.log('Executing initializeTrainingProgram method');
   try {
     const trainingProgram = new TrainingProgram({
       animalId: this._id,
@@ -86,20 +94,21 @@ dogSchema.methods.initializeTrainingProgram = async function(trainer) {
     });
 
     await trainingProgram.save();
-    console.log('Training program created successfully');
     
     this.trainingPrograms.push(trainingProgram._id);
     this.trainingStatus = 'In Training';
     
     return this.save();
   } catch (error) {
-    console.error('Error initializing training program:', error);
     throw error;
   }
 };
 
+/**
+ * Gets training requirements based on dog's attributes
+ * @returns {Object} Training requirements object
+ */
 dogSchema.methods.getTrainingRequirements = function() {
-  console.log('Executing getTrainingRequirements method');
   return {
     obedienceBaseline: this.obedienceLevel,
     serviceTypeSpecificTraining: this.serviceType,
@@ -107,8 +116,11 @@ dogSchema.methods.getTrainingRequirements = function() {
   };
 };
 
+/**
+ * Determines training specializations based on service type
+ * @returns {Array<String>} List of required specializations
+ */
 dogSchema.methods.getTrainingSpecializations = function() {
-  console.log('Executing getTrainingSpecializations method');
   switch (this.serviceType) {
     case 'SERVICE':
       return ['Basic Obedience', 'Task Training', 'Public Access'];
@@ -120,12 +132,11 @@ dogSchema.methods.getTrainingSpecializations = function() {
       return [];
   }
 };
-console.log('Schema methods added');
 
-console.log('Creating Dog model discriminator');
+/**
+ * Dog model - Discriminator of RescueAnimal base model
+ * @type {mongoose.Model}
+ */
 const Dog = RescueAnimal.discriminator('Dog', dogSchema);
-console.log('Dog model discriminator created');
 
-console.log('About to export Dog model');
 module.exports = Dog;
-console.log('Dog model exported');

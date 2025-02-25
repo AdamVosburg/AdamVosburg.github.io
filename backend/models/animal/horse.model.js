@@ -1,20 +1,17 @@
-console.log('Starting to load horse.model.js');
+/**
+ * Horse Model - Mongoose discriminator for RescueAnimal
+ * @module models/horse
+ */
 
-console.log('About to require dependencies');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded');
-
 const RescueAnimal = require('../base/rescueAnimal');
-console.log('RescueAnimal model loaded');
-
 const TrainingProgram = require('../training/trainingProgram.model');
-console.log('TrainingProgram model loaded');
-
 const MedicalRecord = require('../medical/medicalRecord.model');
-console.log('MedicalRecord model loaded');
-console.log('All dependencies loaded');
 
-console.log('Defining horseSchema');
+/**
+ * Horse schema definition
+ * @type {mongoose.Schema}
+ */
 const horseSchema = new mongoose.Schema({
   breed: {
     type: String,
@@ -66,12 +63,12 @@ const horseSchema = new mongoose.Schema({
     default: {}
   }
 });
-console.log('horseSchema defined');
 
-console.log('Adding schema methods');
-
+/**
+ * Initializes horse training parameters and identifies specialization
+ * @returns {Promise<Document>} Updated horse document
+ */
 horseSchema.methods.initializeHorseTraining = function() {
-  console.log('Executing initializeHorseTraining method');
   const trainingRequirements = {
     basicTraining: [
       'Ground handling',
@@ -85,8 +82,12 @@ horseSchema.methods.initializeHorseTraining = function() {
   return this.save();
 };
 
+/**
+ * Creates and initializes a medical record for the horse
+ * @returns {Promise<Document>} Updated horse document with medical record reference
+ * @throws {Error} If medical record creation fails
+ */
 horseSchema.methods.initializeMedicalRecord = async function() {
-  console.log('Executing initializeMedicalRecord method');
   try {
     const medicalRecord = new MedicalRecord({
       animalId: this._id,
@@ -97,18 +98,21 @@ horseSchema.methods.initializeMedicalRecord = async function() {
     });
 
     await medicalRecord.save();
-    console.log('Medical record created successfully');
     
     this.medicalRecords.push(medicalRecord._id);
     return this.save();
   } catch (error) {
-    console.error('Error initializing medical record:', error);
     throw error;
   }
 };
 
+/**
+ * Creates and initializes a training program for the horse
+ * @param {Object} trainer - The trainer object with _id
+ * @returns {Promise<Document>} Updated horse document with training program reference
+ * @throws {Error} If training program creation fails
+ */
 horseSchema.methods.initializeTrainingProgram = async function(trainer) {
-  console.log('Executing initializeTrainingProgram method');
   try {
     const trainingProgram = new TrainingProgram({
       animalId: this._id,
@@ -120,28 +124,32 @@ horseSchema.methods.initializeTrainingProgram = async function(trainer) {
     });
 
     await trainingProgram.save();
-    console.log('Training program created successfully');
     
     this.trainingPrograms.push(trainingProgram._id);
     this.trainingStatus = 'In Training';
     
     return this.save();
   } catch (error) {
-    console.error('Error initializing training program:', error);
     throw error;
   }
 };
 
+/**
+ * Determines appropriate specialization based on horse's attributes
+ * @returns {String} Training specialization
+ */
 horseSchema.methods.determineSpecialization = function() {
-  console.log('Executing determineSpecialization method');
   if (this.temperament >= 4 && this.groundManners >= 4) {
     return this.ridingSafe ? 'Therapy' : 'Working';
   }
   return 'None';
 };
 
+/**
+ * Assesses horse's suitability for therapy work
+ * @returns {Object} Assessment with score and recommendation
+ */
 horseSchema.methods.assessTherapySuitability = function() {
-  console.log('Executing assessTherapySuitability method');
   const suitabilityFactors = [
     this.temperament,
     this.groundManners,
@@ -161,12 +169,10 @@ horseSchema.methods.assessTherapySuitability = function() {
   };
 };
 
-console.log('Schema methods added');
-
-console.log('Creating Horse model discriminator');
+/**
+ * Horse model - Discriminator of RescueAnimal base model
+ * @type {mongoose.Model}
+ */
 const Horse = RescueAnimal.discriminator('Horse', horseSchema);
-console.log('Horse model discriminator created');
 
-console.log('About to export Horse model');
 module.exports = Horse;
-console.log('Horse model exported');

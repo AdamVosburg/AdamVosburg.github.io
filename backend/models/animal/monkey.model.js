@@ -1,20 +1,17 @@
-console.log('Starting to load monkey.model.js');
+/**
+ * Monkey Model - Mongoose discriminator for RescueAnimal
+ * @module models/monkey
+ */
 
-console.log('About to require dependencies');
 const mongoose = require('mongoose');
-console.log('Mongoose loaded');
-
 const RescueAnimal = require('../base/rescueAnimal');
-console.log('RescueAnimal model loaded');
-
 const TrainingProgram = require('../training/trainingProgram.model');
-console.log('TrainingProgram model loaded');
-
 const MedicalRecord = require('../medical/medicalRecord.model');
-console.log('MedicalRecord model loaded');
-console.log('All dependencies loaded');
 
-console.log('Defining monkeySchema');
+/**
+ * Monkey schema definition
+ * @type {mongoose.Schema}
+ */
 const monkeySchema = new mongoose.Schema({
   species: {
     type: String,
@@ -51,12 +48,12 @@ const monkeySchema = new mongoose.Schema({
     type: String
   }]
 });
-console.log('monkeySchema defined');
 
-console.log('Adding schema methods');
-
+/**
+ * Initializes species-specific environmental needs
+ * @returns {Promise<Document>} Updated monkey document
+ */
 monkeySchema.methods.initializeEnvironmentalNeeds = function() {
-  console.log('Executing initializeEnvironmentalNeeds method');
   const environmentalNeedsMap = {
     'Capuchin': {
       habitat: 'Tropical forest enclosure',
@@ -71,8 +68,12 @@ monkeySchema.methods.initializeEnvironmentalNeeds = function() {
   return this.save();
 };
 
+/**
+ * Creates and initializes a medical record for the monkey
+ * @returns {Promise<Document>} Updated monkey document with medical record reference
+ * @throws {Error} If medical record creation fails
+ */
 monkeySchema.methods.initializeMedicalRecord = async function() {
-  console.log('Executing initializeMedicalRecord method');
   try {
     const medicalRecord = new MedicalRecord({
       animalId: this._id,
@@ -83,18 +84,21 @@ monkeySchema.methods.initializeMedicalRecord = async function() {
     });
 
     await medicalRecord.save();
-    console.log('Medical record created successfully');
     
     this.medicalRecords.push(medicalRecord._id);
     return this.save();
   } catch (error) {
-    console.error('Error initializing medical record:', error);
     throw error;
   }
 };
 
+/**
+ * Creates and initializes a training program for the monkey
+ * @param {Object} trainer - The trainer object with _id
+ * @returns {Promise<Document>} Updated monkey document with training program reference
+ * @throws {Error} If training program creation fails
+ */
 monkeySchema.methods.initializeTrainingProgram = async function(trainer) {
-  console.log('Executing initializeTrainingProgram method');
   try {
     const trainingProgram = new TrainingProgram({
       animalId: this._id,
@@ -104,25 +108,20 @@ monkeySchema.methods.initializeTrainingProgram = async function(trainer) {
     });
 
     await trainingProgram.save();
-    console.log('Training program created successfully');
     
     this.trainingPrograms.push(trainingProgram._id);
     this.trainingStatus = 'In Training';
     
     return this.save();
   } catch (error) {
-    console.error('Error initializing training program:', error);
     throw error;
   }
 };
 
-// Add debug logs to other methods similarly
-console.log('Schema methods added');
-
-console.log('Creating Monkey model discriminator');
+/**
+ * Monkey model - Discriminator of RescueAnimal base model
+ * @type {mongoose.Model}
+ */
 const Monkey = RescueAnimal.discriminator('Monkey', monkeySchema);
-console.log('Monkey model discriminator created');
 
-console.log('About to export Monkey model');
 module.exports = Monkey;
-console.log('Monkey model exported');
