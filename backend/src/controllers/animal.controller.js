@@ -1,22 +1,30 @@
-console.log('Starting to load animal.controller.js');
+/**
+ * Animal Controller
+ * @module controllers/animal
+ * @description Handles HTTP requests related to animal management
+ */
 
-console.log('About to require animal.service');
 const AnimalService = require('../services/animal.service.js');
-console.log('AnimalService loaded');
-
-console.log('About to require catchAsync');
 const catchAsync = require('../utils/catchAsync.js');
-console.log('catchAsync loaded');
-
-console.log('About to require apiError');
 const ApiError = require('../utils/apiError.js');
-console.log('ApiError loaded');
 
-console.log('Defining AnimalController class');
+/**
+ * Controller class for animal-related operations
+ * @class AnimalController
+ */
 class AnimalController {
-  // Create a new animal
+  /**
+   * Create a new animal
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.params - Request parameters
+   * @param {string} req.params.animalType - Type of animal to create
+   * @param {Object} req.body - Request body containing animal data
+   * @param {Object} res - Express response object
+   * @returns {Object} JSON response with created animal
+   */
   static createAnimal = catchAsync(async (req, res) => {
-    console.log('Executing createAnimal');
     const { animalType } = req.params;
     const animalData = req.body;
 
@@ -28,9 +36,17 @@ class AnimalController {
     });
   });
 
-  // Get animal by ID
+  /**
+   * Get animal by ID
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.params - Request parameters
+   * @param {string} req.params.id - Animal ID
+   * @param {Object} res - Express response object
+   * @returns {Object} JSON response with animal data
+   */
   static getAnimalById = catchAsync(async (req, res) => {
-    console.log('Executing getAnimalById');
     const { id } = req.params;
 
     const animal = await AnimalService.getAnimalById(id);
@@ -41,9 +57,19 @@ class AnimalController {
     });
   });
 
-  // Update animal status
+  /**
+   * Update animal status
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.params - Request parameters
+   * @param {string} req.params.id - Animal ID
+   * @param {Object} req.body - Request body
+   * @param {string} req.body.status - New status for the animal
+   * @param {Object} res - Express response object
+   * @returns {Object} JSON response with updated animal
+   */
   static updateAnimalStatus = catchAsync(async (req, res) => {
-    console.log('Executing updateAnimalStatus');
     const { id } = req.params;
     const { status } = req.body;
 
@@ -55,9 +81,19 @@ class AnimalController {
     });
   });
 
-  // Assign trainer to animal
+  /**
+   * Assign trainer to animal
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.params - Request parameters
+   * @param {string} req.params.animalId - Animal ID
+   * @param {Object} req.body - Request body
+   * @param {string} req.body.trainerId - Trainer ID
+   * @param {Object} res - Express response object
+   * @returns {Object} JSON response with updated animal
+   */
   static assignTrainer = catchAsync(async (req, res) => {
-    console.log('Executing assignTrainer');
     const { animalId } = req.params;
     const { trainerId } = req.body;
 
@@ -69,9 +105,17 @@ class AnimalController {
     });
   });
 
-  // Get animals by type
+  /**
+   * Get animals by type
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.params - Request parameters
+   * @param {string} req.params.animalType - Type of animal to filter by
+   * @param {Object} res - Express response object
+   * @returns {Object} JSON response with animals of specified type
+   */
   static getAnimalsByType = catchAsync(async (req, res) => {
-    console.log('Executing getAnimalsByType');
     const { animalType } = req.params;
 
     const animals = await AnimalService.getAnimalsByType(animalType);
@@ -84,6 +128,4 @@ class AnimalController {
   });
 }
 
-console.log('About to export AnimalController');
 module.exports = AnimalController;
-console.log('AnimalController exported');
