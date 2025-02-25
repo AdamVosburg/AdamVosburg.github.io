@@ -1,3 +1,9 @@
+/**
+ * Training Program Service
+ * @module services/trainingProgram
+ * @description Provides business logic for training program management
+ */
+
 const TrainingProgram = require('../../models/training/trainingProgram.model.js');
 const TrainingSession = require('../../models/training/trainingSession.model.js');
 const RescueAnimal = require('../../models/base/rescueAnimal.js');
@@ -5,8 +11,19 @@ const Trainer = require('../../models/training/trainer.model.js');
 const ApiError = require('../utils/apiError.js');
 const logger = require('../config/logger.js');
 
+/**
+ * Service class for training program operations
+ * @class TrainingProgramService
+ */
 class TrainingProgramService {
-  // Create a new training program
+  /**
+   * Create a new training program
+   * @static
+   * @async
+   * @param {Object} programData - Training program data
+   * @returns {Promise<Document>} Created training program
+   * @throws {ApiError} If animal or trainer is not found or creation fails
+   */
   static async createTrainingProgram(programData) {
     try {
       // Validate animal exists
@@ -50,7 +67,14 @@ class TrainingProgramService {
     }
   }
 
-  // Get training program by ID
+  /**
+   * Get training program by ID
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @returns {Promise<Document>} Training program document
+   * @throws {ApiError} If training program is not found
+   */
   static async getTrainingProgramById(programId) {
     const program = await TrainingProgram.findById(programId)
       .populate('animalId')
@@ -63,7 +87,15 @@ class TrainingProgramService {
     return program;
   }
 
-  // Add progress report to training program
+  /**
+   * Add progress report to training program
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @param {Object} reportData - Progress report data
+   * @returns {Promise<Document>} Updated training program
+   * @throws {ApiError} If training program is not found
+   */
   static async addProgressReport(programId, reportData) {
     const program = await this.getTrainingProgramById(programId);
     
@@ -77,7 +109,15 @@ class TrainingProgramService {
     return program;
   }
 
-  // Add milestone to training program
+  /**
+   * Add milestone to training program
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @param {Object} milestoneData - Milestone data
+   * @returns {Promise<Document>} Updated training program
+   * @throws {ApiError} If training program is not found
+   */
   static async addMilestone(programId, milestoneData) {
     const program = await this.getTrainingProgramById(programId);
     
@@ -88,7 +128,14 @@ class TrainingProgramService {
     return program;
   }
 
-  // Complete training program
+  /**
+   * Complete training program
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @returns {Promise<Document>} Updated training program
+   * @throws {ApiError} If training program is not found
+   */
   static async completeTrainingProgram(programId) {
     const program = await this.getTrainingProgramById(programId);
     
@@ -106,7 +153,14 @@ class TrainingProgramService {
     return program;
   }
 
-  // Create a training session
+  /**
+   * Create a training session
+   * @static
+   * @async
+   * @param {Object} sessionData - Training session data
+   * @returns {Promise<Document>} Created training session
+   * @throws {ApiError} If training program is not found or creation fails
+   */
   static async createTrainingSession(sessionData) {
     try {
       // Validate training program exists
@@ -122,13 +176,26 @@ class TrainingProgramService {
     }
   }
 
-  // Get training sessions for a program
+  /**
+   * Get training sessions for a program
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @returns {Promise<Array<Document>>} Array of training sessions
+   */
   static async getTrainingSessionsByProgram(programId) {
     return TrainingSession.find({ programId })
       .populate('trainer');
   }
 
-  // Generate program progress report
+  /**
+   * Generate program progress report
+   * @static
+   * @async
+   * @param {string} programId - Training program ID
+   * @returns {Promise<Object>} Program progress report
+   * @throws {ApiError} If training program is not found
+   */
   static async generateProgramProgressReport(programId) {
     const program = await this.getTrainingProgramById(programId);
     

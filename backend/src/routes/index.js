@@ -1,49 +1,41 @@
-console.log('Starting to load routes/index.js');
+/**
+ * API Routes Index
+ * @module routes
+ * @description Centralized router that mounts all application routes
+ */
 
 const express = require('express');
-console.log('Express loaded in routes/index.js');
-
-console.log('About to require animal.routes');
 const animalRoutes = require('./animal.routes.js');
-console.log('animal.routes loaded successfully');
-
-console.log('About to require auth.routes');
 const authRoutes = require('./auth.routes.js');
-console.log('auth.routes loaded successfully');
-
-console.log('About to require trainer.routes');
 const trainerRoutes = require('./trainer.routes.js');
-console.log('trainer.routes loaded successfully');
-
-console.log('About to require trainingProgram.routes');
 const trainingProgramRoutes = require('./trainingProgram.routes');
-console.log('trainingProgram.routes loaded successfully');
-
-console.log('About to require medicalRecord.routes');
 const medicalRecordRoutes = require('./medicalRecord.routes.js');
-console.log('medicalRecord.routes loaded successfully');
-
-console.log('About to require report.routes');
 const reportRoutes = require('./report.routes.js');
-console.log('report.routes loaded successfully');
-
-console.log('All route files loaded successfully');
 
 const router = express.Router();
-console.log('Express router created');
 
-// Mount routes
-console.log('Mounting routes');
+/**
+ * Mount routes
+ * @name API Routes
+ * @description All API routes are mounted with their base paths
+ */
+
+// Animal routes - handles animal CRUD operations
 router.use('/animals', animalRoutes);
+
+// Authentication routes - handles user auth and registration
 router.use('/auth', authRoutes);
+
+// Trainer routes - handles trainer management
 router.use('/trainers', trainerRoutes);
+
+// Training program routes - handles training programs and sessions
 router.use('/training-programs', trainingProgramRoutes);
+
+// Medical record routes - handles medical records and medications
 router.use('/medical-records', medicalRecordRoutes);
+
+// Report routes - handles report generation and export
 router.use('/reports', reportRoutes);
-console.log('All routes mounted successfully');
 
-// Additional routes can be added here
-
-console.log('About to export router');
 module.exports = router;
-console.log('Router exported successfully');

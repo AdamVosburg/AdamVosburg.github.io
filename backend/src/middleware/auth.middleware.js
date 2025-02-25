@@ -1,10 +1,29 @@
+/**
+ * Authentication Middleware
+ * @module middleware/auth
+ * @description Handles request authentication and authorization
+ */
+
 const AuthService = require('../services/auth.service.js');
 const User = require('../../models/user.model.js');
 const ApiError = require('../utils/apiError.js');
 const catchAsync = require('../utils/catchAsync.js');
 
+/**
+ * Middleware class for authentication and authorization
+ * @class AuthMiddleware
+ */
 class AuthMiddleware {
-  // Authenticate user
+  /**
+   * Authenticates a user based on JWT token in Authorization header
+   * @static
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @param {Function} next - Express next middleware function
+   * @returns {void}
+   * @throws {ApiError} If token is missing, invalid, or user does not exist
+   */
   static authenticate = catchAsync(async (req, res, next) => {
     // Check for token in header
     const authHeader = req.headers.authorization;
@@ -31,7 +50,13 @@ class AuthMiddleware {
     next();
   });
 
-  // Role-based authorization
+  /**
+   * Creates a middleware to authorize users based on roles
+   * @static
+   * @param {...string} roles - Roles that are allowed to access the route
+   * @returns {Function} Express middleware function
+   * @throws {ApiError} If user's role is not included in the allowed roles
+   */
   static authorize(...roles) {
     return (req, res, next) => {
       if (!roles.includes(req.user.role)) {

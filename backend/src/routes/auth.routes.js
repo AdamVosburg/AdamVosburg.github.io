@@ -1,48 +1,83 @@
-console.log('Starting to load auth.routes.js');
+/**
+ * Authentication Routes
+ * @module routes/auth
+ * @description API routes for authentication and user management
+ */
 
-console.log('About to require express');
 const express = require('express');
-console.log('Express loaded successfully');
-
-console.log('About to require AuthController');
-let AuthController;
-try {
-  AuthController = require('../controllers/auth.controller.js');
-  console.log('AuthController loaded successfully');
-} catch (error) {
-  console.error('Error loading AuthController:', error.message);
-  console.error('Error stack:', error.stack);
-}
-
-console.log('About to require AuthMiddleware');
-let AuthMiddleware;
-try {
-  AuthMiddleware = require('../middleware/auth.middleware.js');
-  console.log('AuthMiddleware loaded successfully');
-} catch (error) {
-  console.error('Error loading AuthMiddleware:', error.message);
-  console.error('Error stack:', error.stack);
-}
-
-console.log('About to require ValidationMiddleware');
-let ValidationMiddleware;
-try {
-  ValidationMiddleware = require('../middleware/validationMiddleware.js');
-  console.log('ValidationMiddleware loaded successfully');
-} catch (error) {
-  console.error('Error loading ValidationMiddleware:', error.message);
-  console.error('Error stack:', error.stack);
-}
-
-console.log('About to require Joi');
 const Joi = require('joi');
-console.log('Joi loaded successfully');
+const AuthController = require('../controllers/auth.controller.js');
+const AuthMiddleware = require('../middleware/auth.middleware.js');
+const ValidationMiddleware = require('../middleware/validationMiddleware.js');
 
 const router = express.Router();
-console.log('Express router created');
 
-// ... (rest of the file remains the same)
+/**
+ * User registration schema
+ * @type {Joi.ObjectSchema}
+ */
+const registerSchema = Joi.object({
+  username: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  role: Joi.string().valid('admin', 'trainer', 'veterinarian', 'staff').default('staff')
+});
 
-console.log('About to export router from auth.routes.js');
+/**
+ * Login schema
+ * @type {Joi.ObjectSchema}
+ */
+const loginSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required()
+});
+
+/**
+ * Register a new user
+ * @name POST /register
+ * @function
+ * @memberof module:routes/auth
+ * @param {Object} req.body - User registration data
+ * @returns {Object} User data and authentication token
+ */
+router.post('/register', ValidationMiddleware.validate(registerSchema), AuthController.register);
+
+/**
+ * Login a user
+ * @name POST /login
+ * @function
+ * @memberof module:routes/auth
+ * @param {Object} req.body - User login credentials
+ * @returns {Object} User data and authentication token
+ */
+router.post('/login', ValidationMiddleware.validate(loginSchema), AuthController.login);
+
+/**
+ * Get current user profile
+ * @name GET /me
+ * @function
+ * @memberof module:routes/auth
+ * @requires Authentication
+ * @returns {Object} Current user data
+ */
+router.get('/me', AuthMiddleware.authenticate, AuthController.getCurrentUser);
+
+/**
+ * Admin-only route example
+ * @name GET /admin
+ * @function
+ * @memberof module:routes/auth
+ * @requires Authentication and Authorization
+ * @returns {Object} Success message
+ */
+router.get('/admin', 
+  AuthMiddleware.authenticate, 
+  AuthMiddleware.authorize('admin'), 
+  (req, res) => {
+    res.status(200).json({ message: 'Admin access granted' });
+  }
+);
+
 module.exports = router;
-console.log('Router exported from auth.routes.js');
