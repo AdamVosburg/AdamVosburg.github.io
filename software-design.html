@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grazios Rescue System - Software Design Demo</title>
     <style>
+        /* 
+         * Terminal-Inspired User Interface Stylesheet
+         * 
+         * @description Creates a professional, code-editor-like interface 
+         * for presenting software architecture details
+         * 
+         * @author Adam Vosburg
+         * @institution Southern New Hampshire University (SNHU)
+         * @version 1.0.0
+         */
         :root {
             --terminal-bg: #2b2b2b;
             --terminal-text: #f0f0f0;
@@ -199,7 +209,7 @@
     <div class="terminal">
         <div class="terminal-header">
             <div class="terminal-controls">
-                <div class="terminal-control terminal-close"></div>
+                <div class="terminal-control terminal-close" onclick="returnToHomePage()"></div>
                 <div class="terminal-control terminal-minimize"></div>
                 <div class="terminal-control terminal-maximize"></div>
             </div>
@@ -218,6 +228,7 @@
             <p><span class="menu-option" onclick="showDatabaseIntegration()">3. Database Integration</span> - MongoDB Atlas connection details</p>
             <p><span class="menu-option" onclick="showKeyComponents()">4. Key Components</span> - Detailed look at core services</p>
             <p><span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands</p>
+            <p><span class="menu-option" onclick="returnToHomePage()">6. Home</span> - Return to GitHub Pages</p>
         </div>
         <div class="terminal-input-container">
             <span class="terminal-prompt">user@grazios-system:~$</span>
@@ -226,68 +237,128 @@
     </div>
 
     <script>
+        /**
+         * Grazios Rescue System - Software Design Interactive Terminal
+         * 
+         * @description Provides an interactive exploration of the system's 
+         * software architecture, design principles, and technical implementation
+         * 
+         * @author Adam Vosburg
+         * @institution Southern New Hampshire University (SNHU)
+         * @version 1.0.0
+         */
+
+        // DOM element references for terminal interaction
         const outputElement = document.getElementById('terminal-output');
         const inputElement = document.getElementById('terminal-input');
         
-        // Handle input from terminal
+        /**
+         * Returns user to the main GitHub Pages index
+         * 
+         * @function returnToHomePage
+         * @description Redirects the user to the main portfolio page
+         */
+        function returnToHomePage() {
+            try {
+                window.location.href = 'index.html';
+            } catch (error) {
+                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
+            }
+        }
+        
+        /**
+         * Handles terminal input events
+         * 
+         * @function handleInput
+         * @param {Event} event - Keyboard event triggered by user input
+         * @description Processes user commands and executes corresponding actions
+         */
         function handleInput(event) {
             if (event.key === 'Enter') {
                 const command = inputElement.value.trim().toLowerCase();
                 inputElement.value = '';
                 
+                // Echo the command
                 writeToTerminal(`<span class="terminal-prompt">user@grazios-system:~$</span> ${command}`);
                 
-                // Process command
-                if (command === 'help' || command === '5') {
-                    showHelp();
-                } else if (command === '1' || command === 'overview') {
-                    showSystemOverview();
-                } else if (command === '2' || command === 'backend') {
-                    showBackendStructure();
-                } else if (command === '3' || command === 'database') {
-                    showDatabaseIntegration();
-                } else if (command === '4' || command === 'components') {
-                    showKeyComponents();
-                } else if (command === 'clear') {
-                    clearTerminal();
-                } else if (command === 'menu' || command === 'home') {
-                    showMainMenu();
-                } else {
-                    writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
-                    writeToTerminal(`Type 'help' to see available commands.`);
+                // Command processing logic
+                try {
+                    switch (command) {
+                        case 'help':
+                        case '5':
+                            showHelp();
+                            break;
+                        case 'overview':
+                        case '1':
+                            showSystemOverview();
+                            break;
+                        case 'backend':
+                        case '2':
+                            showBackendStructure();
+                            break;
+                        case 'database':
+                        case '3':
+                            showDatabaseIntegration();
+                            break;
+                        case 'components':
+                        case '4':
+                            showKeyComponents();
+                            break;
+                        case 'clear':
+                            clearTerminal();
+                            break;
+                        case 'home':
+                        case 'exit':
+                        case '6':
+                            returnToHomePage();
+                            break;
+                        default:
+                            writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
+                            writeToTerminal(`Type 'help' to see available commands.`);
+                    }
+                } catch (error) {
+                    writeToTerminal(`<span class="error">Error processing command: ${error.message}</span>`);
                 }
                 
-                // Scroll to bottom
+                // Ensure terminal scrolls to bottom
                 outputElement.scrollTop = outputElement.scrollHeight;
             }
         }
         
-        // Write to terminal output
+        /**
+         * Writes output to the terminal
+         * 
+         * @function writeToTerminal
+         * @param {string} text - Text to be displayed in the terminal
+         * @description Appends text to the terminal output and scrolls to bottom
+         */
         function writeToTerminal(text) {
-            outputElement.innerHTML += `<p>${text}</p>`;
-            outputElement.scrollTop = outputElement.scrollHeight;
+            try {
+                outputElement.innerHTML += `<p>${text}</p>`;
+                outputElement.scrollTop = outputElement.scrollHeight;
+            } catch (error) {
+                console.error('Terminal writing error:', error);
+            }
         }
         
-        // Clear terminal
+        /**
+         * Clears the terminal output
+         * 
+         * @function clearTerminal
+         * @description Resets terminal output and displays initial message
+         */
         function clearTerminal() {
             outputElement.innerHTML = '';
             writeToTerminal(`<span class="info bold">Grazios Rescue System - Software Design v1.0.0</span>`);
-            writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu.`);
+            writeToTerminal(`Terminal cleared. Type 'help' for available commands.`);
         }
         
-        // Show main menu
-        function showMainMenu() {
-            clearTerminal();
-            writeToTerminal(`Welcome to the Grazios Rescue System Software Design Demonstration!`);
-            writeToTerminal(`<span class="info">Please select an option to explore the system architecture:</span>`);
-            writeToTerminal(`<span class="menu-option" onclick="showSystemOverview()">1. System Overview</span> - Comprehensive architecture breakdown`);
-            writeToTerminal(`<span class="menu-option" onclick="showBackendStructure()">2. Backend Structure</span> - Explore project directory and components`);
-            writeToTerminal(`<span class="menu-option" onclick="showDatabaseIntegration()">3. Database Integration</span> - MongoDB Atlas connection details`);
-            writeToTerminal(`<span class="menu-option" onclick="showKeyComponents()">4. Key Components</span> - Detailed look at core services`);
-            writeToTerminal(`<span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands`);
-        }
-        
-        // Show help information
+        /**
+         * Displays help information
+         * 
+         * @function showHelp
+         * @description Outputs available commands and their descriptions
+         */
         function showHelp() {
             writeToTerminal(`<span class="info bold">Available Commands:</span>`);
             writeToTerminal(`- <span class="info">1, overview</span>: Show system architecture overview`);
@@ -296,10 +367,15 @@
             writeToTerminal(`- <span class="info">4, components</span>: Explore key system components`);
             writeToTerminal(`- <span class="info">5, help</span>: Show this help information`);
             writeToTerminal(`- <span class="info">clear</span>: Clear the terminal`);
-            writeToTerminal(`- <span class="info">menu, home</span>: Return to main menu`);
+            writeToTerminal(`- <span class="info">home, exit</span>: Return to GitHub Pages`);
         }
         
-        // Show system overview
+        /**
+         * Displays system architecture overview
+         * 
+         * @function showSystemOverview
+         * @description Provides a comprehensive breakdown of the system architecture
+         */
         function showSystemOverview() {
             clearTerminal();
             writeToTerminal(`<span class="info bold">Grazios Rescue System - Architecture Overview</span>`);
@@ -329,7 +405,12 @@
             writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore specific components.</span>`);
         }
         
-        // Show backend structure
+        /**
+         * Displays backend project structure
+         * 
+         * @function showBackendStructure
+         * @description Illustrates the directory and component organization of the backend
+         */
         function showBackendStructure() {
             clearTerminal();
             writeToTerminal(`<span class="info bold">Backend Project Structure</span>`);
@@ -340,141 +421,4 @@
 │   │   ├── animalMatch.controller.js
 │   │   ├── auth.controller.js
 │   │   └── ...
-│   ├── <span class="highlight">models/</span>
-│   │   ├── animal/
-│   │   │   ├── dog.model.js
-│   │   │   ├── horse.model.js
-│   │   │   └── ...
-│   │   ├── base/
-│   │   │   └── rescueAnimal.js
-│   │   └── medical/
-│   │       ├── medicalRecord.model.js
-│   │       └── ...
-│   ├── <span class="highlight">routes/</span>
-│   │   ├── animal.routes.js
-│   │   ├── animalMatch.routes.js
-│   │   └── ...
-│   ├── <span class="highlight">services/</span>
-│   │   ├── animal.service.js
-│   │   ├── animalMatch.service.js
-│   │   └── ...
-│   └── <span class="highlight">middleware/</span>
-│       ├── auth.middleware.js
-│       └── validation.middleware.js
-└── index.js</div>`);
-            
-            writeToTerminal(`\n<span class="info">Key Architectural Highlights:</span>`);
-            writeToTerminal(`- Modular design with clear separation of concerns`);
-            writeToTerminal(`- Controllers handle request logic`);
-            writeToTerminal(`- Services contain core business logic`);
-            writeToTerminal(`- Models define data structures`);
-            writeToTerminal(`- Middleware handles cross-cutting concerns`);
-            
-            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore specific components.</span>`);
-        }
-        
-        // Show database integration
-        function showDatabaseIntegration() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">MongoDB Atlas Database Integration</span>`);
-            
-            writeToTerminal(`<span class="highlight">Connection Strategy:</span>`);
-            writeToTerminal(`- Cloud-based MongoDB Atlas cluster`);
-            writeToTerminal(`- Secure connection using environment variables`);
-            
-            writeToTerminal(`\n<span class="highlight">Sample Connection Configuration:</span>`);
-            writeToTerminal(`<div class="code-block">const mongoose = require('mongoose');
-
-// MongoDB Connection Configuration
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            <span class="info">useNewUrlParser: true,
-            useUnifiedTopology: true,
-            dbName: 'grazios-rescue-system'</span>
-        });
-        console.log('<span class="success">✓ MongoDB Connection Established</span>');
-    } catch (error) {
-        console.error('<span class="error">✗ Database Connection Failed</span>', error);
-        process.exit(1);
-    }
-};</div>`);
-            
-            writeToTerminal(`\n<span class="info">Database Security Features:</span>`);
-            writeToTerminal(`- Environment-based connection strings`);
-            writeToTerminal(`- Connection pooling`);
-            writeToTerminal(`- Automatic reconnection`);
-            writeToTerminal(`- Error handling and logging`);
-            
-            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore other components.</span>`);
-        }
-        
-        // Show key components
-        function showKeyComponents() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">Grazios Rescue System - Key Components</span>`);
-            
-            writeToTerminal(`<span class="highlight">1. Animal Matching Service</span>`);
-            writeToTerminal(`<div class="code-block">class AnimalMatchService {
-    async findBestMatch(requirements) {
-        // Advanced matching algorithm
-        const <span class="info">candidates</span> = await this.filterCandidates(requirements);
-        const <span class="info">scoredMatches</span> = candidates.map(animal => ({
-            animal,
-            score: this.calculateMatchScore(animal, requirements)
-        }));
-        
-        return <span class="highlight">scoredMatches
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 3)</span>; // Top 3 matches
-    }
-    
-    calculateMatchScore(animal, requirements) {
-        // Weighted matching algorithm
-        let <span class="info">totalScore</span> = 0;
-        
-        // Apply weighted criteria
-        totalScore += this.evaluateServiceType(animal, requirements);
-        totalScore += this.evaluateTemperament(animal, requirements);
-        // Additional scoring criteria...
-        
-        return totalScore;
-    }
-}</div>`);
-            
-            writeToTerminal(`\n<span class="highlight">2. Authentication Middleware</span>`);
-            writeToTerminal(`<div class="code-block">const jwt = require('jsonwebtoken');
-
-const authMiddleware = (req, res, next) => {
-    const <span class="info">token</span> = req.header('Authorization')?.replace('Bearer ', '');
-    
-    try {
-        const <span class="highlight">decoded</span> = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        res.status(401).json({ 
-            <span class="error">error: 'Authentication failed'</span> 
-        });
-    }
-};</div>`);
-            
-            writeToTerminal(`\n<span class="info">Core Design Principles:</span>`);
-            writeToTerminal(`- Modular and extensible architecture`);
-            writeToTerminal(`- Robust error handling`);
-            writeToTerminal(`- Secure authentication mechanisms`);
-            writeToTerminal(`- Advanced matching algorithms`);
-            
-            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore other components.</span>`);
-        }
-        
-        // Set initial focus to input
-        inputElement.focus();
-        
-        // Event listener to keep focus on input when clicking anywhere in terminal
-        document.querySelector('.terminal').addEventListener('click', () => {
-            inputElement.focus();
-        });
-    </script>
-</body>
-</html>
+│   ├── <span
