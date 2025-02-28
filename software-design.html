@@ -421,4 +421,160 @@
 │   │   ├── animalMatch.controller.js
 │   │   ├── auth.controller.js
 │   │   └── ...
-│   ├── <span
+│   ├── <span class="highlight">models/</span>
+│   │   ├── animal/
+│   │   │   ├── dog.model.js
+│   │   │   ├── horse.model.js
+│   │   │   └── ...
+│   │   ├── base/
+│   │   │   └── rescueAnimal.js
+│   │   └── medical/
+│   │       ├── medicalRecord.model.js
+│   │       └── ...
+│   ├── <span class="highlight">routes/</span>
+│   │   ├── animal.routes.js
+│   │   ├── animalMatch.routes.js
+│   │   └── ...
+│   ├── <span class="highlight">services/</span>
+│   │   ├── animal.service.js
+│   │   ├── animalMatch.service.js
+│   │   └── ...
+│   └── <span class="highlight">middleware/</span>
+│       ├── auth.middleware.js
+│       └── validation.middleware.js
+└── index.js</div>`);
+            
+            writeToTerminal(`\n<span class="info">Key Architectural Highlights:</span>`);
+            writeToTerminal(`- Modular design with clear separation of concerns`);
+            writeToTerminal(`- Controllers handle request logic`);
+            writeToTerminal(`- Services contain core business logic`);
+            writeToTerminal(`- Models define data structures`);
+            writeToTerminal(`- Middleware handles cross-cutting concerns`);
+            
+            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore specific components.</span>`);
+        }
+        
+        /**
+         * Displays database integration details
+         * 
+         * @function showDatabaseIntegration
+         * @description Provides insights into the MongoDB Atlas database connection
+         */
+        function showDatabaseIntegration() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Atlas Database Integration</span>`);
+            
+            writeToTerminal(`<span class="highlight">Connection Strategy:</span>`);
+            writeToTerminal(`- Cloud-based MongoDB Atlas cluster`);
+            writeToTerminal(`- Secure connection using environment variables`);
+            
+            writeToTerminal(`\n<span class="highlight">Sample Connection Configuration:</span>`);
+            writeToTerminal(`<div class="code-block">const mongoose = require('mongoose');
+
+// MongoDB Connection Configuration
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            <span class="info">useNewUrlParser: true,
+            useUnifiedTopology: true,
+            dbName: 'grazios-rescue-system'</span>
+        });
+        console.log('<span class="success">✓ MongoDB Connection Established</span>');
+    } catch (error) {
+        console.error('<span class="error">✗ Database Connection Failed</span>', error);
+        process.exit(1);
+    }
+};</div>`);
+            
+            writeToTerminal(`\n<span class="info">Database Security Features:</span>`);
+            writeToTerminal(`- Environment-based connection strings`);
+            writeToTerminal(`- Connection pooling`);
+            writeToTerminal(`- Automatic reconnection`);
+            writeToTerminal(`- Error handling and logging`);
+            
+            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore other components.</span>`);
+        }
+        
+        /**
+         * Displays key system components
+         * 
+         * @function showKeyComponents
+         * @description Explores the core services and their responsibilities
+         */
+        function showKeyComponents() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Grazios Rescue System - Key Components</span>`);
+            
+            writeToTerminal(`<span class="highlight">1. Authentication Service</span>`);
+            writeToTerminal(`<div class="code-block">class AuthService {
+    async authenticateUser(credentials) {
+        // Validate user credentials
+        const user = await UserModel.findByCredentials(
+            credentials.email, 
+            credentials.password
+        );
+        
+        // Generate JWT token
+        const token = this.generateJWTToken(user);
+        
+        return {
+            user: user.toJSON(),
+            token
+        };
+    }
+    
+    generateJWTToken(user) {
+        return jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+    }
+}</div>`);
+            
+            writeToTerminal(`\n<span class="highlight">2. Animal Matching Service</span>`);
+            writeToTerminal(`<div class="code-block">class AnimalMatchService {
+    async findBestMatch(requirements) {
+        // Advanced matching algorithm
+        const candidates = await this.filterCandidates(requirements);
+        const scoredMatches = candidates.map(animal => ({
+            animal,
+            score: this.calculateMatchScore(animal, requirements)
+        }));
+        
+        return scoredMatches
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 3); // Top 3 matches
+    }
+    
+    calculateMatchScore(animal, requirements) {
+        // Weighted matching algorithm logic
+        let totalScore = 0;
+        
+        // Apply weighted criteria
+        totalScore += this.evaluateServiceType(animal, requirements);
+        totalScore += this.evaluateTemperament(animal, requirements);
+        
+        return totalScore;
+    }
+}</div>`);
+            
+            writeToTerminal(`\n<span class="info">Core Design Principles:</span>`);
+            writeToTerminal(`- Modular and extensible architecture`);
+            writeToTerminal(`- Robust error handling`);
+            writeToTerminal(`- Secure authentication mechanisms`);
+            writeToTerminal(`- Advanced matching algorithms`);
+            
+            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or explore other components.</span>`);
+        }
+        
+        // Set initial focus to input
+        inputElement.focus();
+        
+        // Event listener to keep focus on input when clicking anywhere in terminal
+        document.querySelector('.terminal').addEventListener('click', () => {
+            inputElement.focus();
+        });
+    </script>
+</body>
+</html>
