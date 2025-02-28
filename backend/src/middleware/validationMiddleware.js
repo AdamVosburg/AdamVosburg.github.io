@@ -78,4 +78,43 @@ ValidationMiddleware.monkeyIntakeSchema = ValidationMiddleware.baseAnimalIntakeS
   toolUseCapability: Joi.boolean().required()
 });
 
+/**
+ * Animal matching criteria schema
+ * @type {Joi.ObjectSchema}
+ */
+ValidationMiddleware.matchingCriteriaSchema = Joi.object({
+  animalType: Joi.string().valid('dog', 'monkey', 'bird', 'horse').required(),
+  attributes: Joi.object().required().min(1),
+  weights: Joi.object().optional()
+});
+
+/**
+ * Service requirements schema
+ * @type {Joi.ObjectSchema}
+ */
+ValidationMiddleware.serviceRequirementsSchema = Joi.object({
+  serviceType: Joi.string().valid(
+    'SERVICE', 'THERAPY', 'SEARCH', 'EQUINE_THERAPY'
+  ).required(),
+  clientNeeds: Joi.object({
+    specializations: Joi.array().items(Joi.string()).optional(),
+    riderWeight: Joi.number().optional(),
+    mobilityIssues: Joi.boolean().optional(),
+    ageGroup: Joi.string().optional(),
+    environmentalFactors: Joi.array().items(Joi.string()).optional()
+  }).required()
+});
+
+/**
+ * Priority matching schema
+ * @type {Joi.ObjectSchema}
+ */
+ValidationMiddleware.priorityMatchingSchema = Joi.object({
+  criteria: Joi.object({
+    animalType: Joi.string().valid('dog', 'monkey', 'bird', 'horse').required(),
+    attributes: Joi.object().required().min(1)
+  }).required(),
+  priorityAttributes: Joi.array().items(Joi.string()).min(1).required()
+});
+
 module.exports = ValidationMiddleware;
