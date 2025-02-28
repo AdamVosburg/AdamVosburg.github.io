@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grazios Rescue System - Animal Matching Demo</title>
+    <style>
+        :root {
+            --terminal-bg: #2b2b2b;
+            --terminal-text: #f0f0f0;
+            --terminal-green: #8bc34a;
+            --terminal-blue: #64b5f6;
+            --terminal-yellow: #ffeb3b;
+            --terminal-red: #ff5252;
+        }
+        
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: var(--terminal-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--terminal-green);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        .description {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            line-height: 1.5;
+            text-align: center;
+            color: var(--terminal-text);
+            opacity: 0.8;
+        }
+        
+        .terminal {
+            background-color: var(--terminal-bg);
+            border-radius: 5px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .terminal-header {
+            background-color: #1a1a1a;
+            padding: 8px 12px;
+            border-radius: 5px 5px 0 0;
+            margin: -20px -20px 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+        
+        .terminal-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-close {
+            background-color: #ff5f56;
+        }
+        
+        .terminal-minimize {
+            background-color: #ffbd2e;
+        }
+        
+        .terminal-maximize {
+            background-color: #27c93f;
+        }
+        
+        .terminal-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .terminal-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        
+        .terminal-output p {
+            margin: 0 0 8px;
+            line-height: 1.5;
+        }
+        
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-prompt {
+            color: var(--terminal-green);
+            margin-right: 8px;
+        }
+        
+        .terminal-input {
+            background-color: transparent;
+            border: none;
+            color: var(--terminal-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+        }
+        
+        .success {
+            color: var(--terminal-green);
+        }
+        
+        .info {
+            color: var(--terminal-blue);
+        }
+        
+        .warning {
+            color: var(--terminal-yellow);
+        }
+        
+        .error {
+            color: var(--terminal-red);
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+        
+        .menu-option {
+            color: var(--terminal-blue);
+            cursor: pointer;
+        }
+        
+        .menu-option:hover {
+            text-decoration: underline;
+        }
+        
+        .animal-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .match-score {
+            float: right;
+            background-color: var(--terminal-green);
+            color: black;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        
+        .help-text {
+            color: #888;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            color: var(--terminal-blue);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Grazios Rescue System</h1>
+        <div class="description">
+            Interactive demonstration of advanced animal matching algorithms - No database connection required
+        </div>
+    </header>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-controls">
+                <div class="terminal-control terminal-close"></div>
+                <div class="terminal-control terminal-minimize"></div>
+                <div class="terminal-control terminal-maximize"></div>
+            </div>
+            <div class="terminal-title">grazios-rescue-system</div>
+        </div>
+        <div class="terminal-output" id="terminal-output">
+            <p class="info bold">Grazios Rescue System v1.0.0</p>
+            <p>Initializing system modules...</p>
+            <p class="success">✓ Animal modules loaded</p>
+            <p class="success">✓ Matching algorithms initialized</p>
+            <p class="success">✓ Validation services ready</p>
+            <p>Welcome to the Grazios Rescue System Animal Matching Demo!</p>
+            <p>This demonstration showcases the advanced matching algorithms implemented in the system.</p>
+            <p class="info">Please select an option to continue:</p>
+            <p><span class="menu-option" onclick="showWeightedMatching()">1. Weighted Attribute Matching</span> - Match animals based on weighted criteria</p>
+            <p><span class="menu-option" onclick="showServiceMatching()">2. Service Animal Matching</span> - Match animals for specific service needs</p>
+            <p><span class="menu-option" onclick="showPriorityMatching()">3. Priority Queue Matching</span> - Match animals using attribute priorities</p>
+            <p><span class="menu-option" onclick="showAlgorithmInfo()">4. Algorithm Information</span> - Learn about the matching algorithms</p>
+            <p><span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands</p>
+        </div>
+        <div class="terminal-input-container">
+            <span class="terminal-prompt">user@grazios:~$</span>
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Type a command or select an option above..." onkeydown="handleInput(event)">
+        </div>
+    </div>
+
+    <script>
+        // Sample data for animal matches
+        const animals = {
+            dogs: [
+                { id: "D001", name: "Max", breed: "Labrador Retriever", age: 3, gender: "Male", serviceType: "THERAPY", obedienceLevel: 4, temperament: 5, specializations: ["Anxiety Support", "Emotional Support"] },
+                { id: "D002", name: "Bonita", breed: "Golden Retriever", age: 2, gender: "Female", serviceType: "SERVICE", obedienceLevel: 5, temperament: 5, specializations: ["Mobility Assistance", "Item Retrieval"] },
+                { id: "D003", name: "Carl", breed: "German Shepherd", age: 4, gender: "Male", serviceType: "SEARCH", obedienceLevel: 5, temperament: 4, specializations: ["Scent Detection", "Tracking"] },
+                { id: "D004", name: "Lady", breed: "Border Collie", age: 2, gender: "Female", serviceType: "THERAPY", obedienceLevel: 4, temperament: 5, specializations: ["PTSD Support", "Hospital Visits"] },
+                { id: "D005", name: "Coop", breed: "Beagle", age: 3, gender: "Male", serviceType: "SEARCH", obedienceLevel: 3, temperament: 4, specializations: ["Scent Detection"] }
+            ],
+            horses: [
+                { id: "H001", name: "Riverwind", breed: "Quarter Horse", age: 7, gender: "Male", ridingSafe: true, temperament: 4, heightHands: 15, maxRiderWeight: 200, groundManners: 5, trainingSpecialization: "Therapy" },
+                { id: "H002", name: "Thunderfoot", breed: "Arabian", age: 5, gender: "Female", ridingSafe: true, temperament: 3, heightHands: 14, maxRiderWeight: 180, groundManners: 4, trainingSpecialization: "Riding" },
+                { id: "H003", name: "Stormy", breed: "Thoroughbred", age: 8, gender: "Male", ridingSafe: true, temperament: 3, heightHands: 16, maxRiderWeight: 220, groundManners: 3, trainingSpecialization: "Working" }
+            ],
+            birds: [
+                { id: "B001", name: "El' Tuco", species: "African Grey", age: 3, gender: "Male", flightCapable: true, wingspan: 30, vocalCapabilities: 5, migratory: false },
+                { id: "B002", name: "Tweedy", species: "Cockatiel", age: 2, gender: "Female", flightCapable: true, wingspan: 20, vocalCapabilities: 3, migratory: false }
+            ],
+            monkeys: [
+                { id: "M001", name: "Samus", species: "Capuchin", age: 4, gender: "Male", toolUseCapability: true, dexterityLevel: 8, height: 45, tailLength: 50, bodyLength: 40 },
+                { id: "M002", name: "Coco", species: "Marmoset", age: 3, gender: "Female", toolUseCapability: true, dexterityLevel: 7, height: 25, tailLength: 30, bodyLength: 20 }
+            ]
+        };
+
+        const outputElement = document.getElementById('terminal-output');
+        const inputElement = document.getElementById('terminal-input');
+        
+        // Handle input from terminal
+        function handleInput(event) {
+            if (event.key === 'Enter') {
+                const command = inputElement.value.trim().toLowerCase();
+                inputElement.value = '';
+                
+                writeToTerminal(`<span class="terminal-prompt">user@grazios:~$</span> ${command}`);
+                
+                // Process command
+                if (command === 'help' || command === '5') {
+                    showHelp();
+                } else if (command === '1' || command === 'weighted' || command === 'weighted matching') {
+                    showWeightedMatching();
+                } else if (command === '2' || command === 'service' || command === 'service matching') {
+                    showServiceMatching();
+                } else if (command === '3' || command === 'priority' || command === 'priority matching') {
+                    showPriorityMatching();
+                } else if (command === '4' || command === 'info' || command === 'algorithm') {
+                    showAlgorithmInfo();
+                } else if (command === 'clear') {
+                    clearTerminal();
+                } else if (command === 'menu' || command === 'home') {
+                    showMainMenu();
+                } else {
+                    writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
+                    writeToTerminal(`Type 'help' to see available commands.`);
+                }
+                
+                // Scroll to bottom
+                outputElement.scrollTop = outputElement.scrollHeight;
+            }
+        }
+        
+        // Write to terminal output
+        function writeToTerminal(text) {
+            outputElement.innerHTML += `<p>${text}</p>`;
+            outputElement.scrollTop = outputElement.scrollHeight;
+        }
+        
+        // Clear terminal
+        function clearTerminal() {
+            outputElement.innerHTML = '';
+            writeToTerminal(`<span class="info bold">Grazios Rescue System v1.0.0</span>`);
+            writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu.`);
+        }
+        
+        // Show main menu
+        function showMainMenu() {
+            clearTerminal();
+            writeToTerminal(`Welcome to the Grazios Rescue System Animal Matching Demo!`);
+            writeToTerminal(`This demonstration showcases the advanced matching algorithms implemented in the system.`);
+            writeToTerminal(`<span class="info">Please select an option to continue:</span>`);
+            writeToTerminal(`<span class="menu-option" onclick="showWeightedMatching()">1. Weighted Attribute Matching</span> - Match animals based on weighted criteria`);
+            writeToTerminal(`<span class="menu-option" onclick="showServiceMatching()">2. Service Animal Matching</span> - Match animals for specific service needs`);
+            writeToTerminal(`<span class="menu-option" onclick="showPriorityMatching()">3. Priority Queue Matching</span> - Match animals using attribute priorities`);
+            writeToTerminal(`<span class="menu-option" onclick="showAlgorithmInfo()">4. Algorithm Information</span> - Learn about the matching algorithms`);
+            writeToTerminal(`<span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands`);
+        }
+        
+        // Show help information
+        function showHelp() {
+            writeToTerminal(`<span class="info bold">Available Commands:</span>`);
+            writeToTerminal(`- <span class="info">1, weighted, weighted matching</span>: Show weighted attribute matching demo`);
+            writeToTerminal(`- <span class="info">2, service, service matching</span>: Show service animal matching demo`);
+            writeToTerminal(`- <span class="info">3, priority, priority matching</span>: Show priority queue matching demo`);
+            writeToTerminal(`- <span class="info">4, info, algorithm</span>: Show algorithm information`);
+            writeToTerminal(`- <span class="info">5, help</span>: Show this help information`);
+            writeToTerminal(`- <span class="info">clear</span>: Clear the terminal`);
+            writeToTerminal(`- <span class="info">menu, home</span>: Return to main menu`);
+            writeToTerminal(`<span class="help-text">You can click on menu options or type commands.</span>`);
+        }
+        
+        // Show weighted matching demo
+        function showWeightedMatching() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Weighted Attribute Matching Algorithm Demo</span>`);
+            writeToTerminal(`This algorithm matches animals based on weighted criteria, where each attribute can have a different importance.`);
+            writeToTerminal(`<span class="info">Simulation: Finding a therapy dog with specific attributes</span>`);
+            
+            // Simulated matching criteria
+            writeToTerminal(`<span class="bold">Matching Criteria:</span>`);
+            writeToTerminal(`- Animal Type: <span class="info">Dog</span>`);
+            writeToTerminal(`- Service Type: <span class="info">THERAPY</span> (Weight: 3)`);
+            writeToTerminal(`- Temperament: <span class="info">5</span> (Weight: 2)`);
+            writeToTerminal(`- Obedience Level: <span class="info">4+</span> (Weight: 2)`);
+            writeToTerminal(`- Gender: <span class="info">Female</span> (Weight: 1)`);
+            
+            writeToTerminal(`<span class="bold">Running matching algorithm...</span>`);
+            
+            // Simulated delay
+            setTimeout(() => {
+                writeToTerminal(`<span class="success">✓ Match processing complete</span>`);
+                writeToTerminal(`<span class="bold">Match Results:</span>`);
+                
+                // Result 1
+                writeToTerminal(`<div class="animal-card">
+                    <span class="match-score">96%</span>
+                    <div><span class="bold">Name:</span> Luna (ID: D004)</div>
+                    <div><span class="bold">Breed:</span> Border Collie</div>
+                    <div><span class="bold">Service Type:</span> THERAPY</div>
+                    <div><span class="bold">Temperament:</span> 5/5</div>
+                    <div><span class="bold">Obedience Level:</span> 4/5</div>
+                    <div><span class="bold">Gender:</span> Female</div>
+                    <div><span class="bold">Specializations:</span> PTSD Support, Hospital Visits</div>
+                </div>`);
+                
+                // Result 2
+                writeToTerminal(`<div class="animal-card">
+                    <span class="match-score">78%</span>
+                    <div><span class="bold">Name:</span> Max (ID: D001)</div>
+                    <div><span class="bold">Breed:</span> Labrador Retriever</div>
+                    <div><span class="bold">Service Type:</span> THERAPY</div>
+                    <div><span class="bold">Temperament:</span> 5/5</div>
+                    <div><span class="bold">Obedience Level:</span> 4/5</div>
+                    <div><span class="bold">Gender:</span> Male</div>
+                    <div><span class="bold">Specializations:</span> Anxiety Support, Emotional Support</div>
+                </div>`);
+                
+                writeToTerminal(`<span class="help-text">The weighted algorithm scored Luna higher because she matches all criteria, including gender.</span>`);
+                writeToTerminal(`<span class="help-text">Max scored lower primarily due to gender mismatch, which has a weight of 1.</span>`);
+                writeToTerminal(`<span class="info">Type 'menu' to return to main menu or try another command.</span>`);
+            }, 1000);
+        }
+        
+        // Show service matching demo
+        function showServiceMatching() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Service Animal Matching Algorithm Demo</span>`);
+            writeToTerminal(`This specialized algorithm matches animals for specific service roles based on their capabilities.`);
+            writeToTerminal(`<span class="info">Simulation: Finding a service dog for mobility assistance</span>`);
+            
+            // Simulated service requirements
+            writeToTerminal(`<span class="bold">Service Requirements:</span>`);
+            writeToTerminal(`- Service Type: <span class="info">SERVICE</span>`);
+            writeToTerminal(`- Client Needs: <span class="info">Mobility Assistance, Item Retrieval</span>`);
+            writeToTerminal(`- Client Age Group: <span class="info">Adult</span>`);
+            writeToTerminal(`- Environmental Factors: <span class="info">Urban Setting, Public Transportation</span>`);
+            
+            writeToTerminal(`<span class="bold">Running service matching algorithm...</span>`);
+            
+            // Simulated delay
+            setTimeout(() => {
+                writeToTerminal(`<span class="success">✓ Service match processing complete</span>`);
+                writeToTerminal(`<span class="bold">Service Match Results:</span>`);
+                
+                // Result 1
+                writeToTerminal(`<div class="animal-card">
+                    <span class="match-score">94%</span>
+                    <div><span class="bold">Name:</span> Bella (ID: D002)</div>
+                    <div><span class="bold">Breed:</span> Golden Retriever</div>
+                    <div><span class="bold">Service Type:</span> SERVICE</div>
+                    <div><span class="bold">Obedience Level:</span> 5/5</div>
+                    <div><span class="bold">Temperament:</span> 5/5</div>
+                    <div><span class="bold">Specializations:</span> Mobility Assistance, Item Retrieval</div>
+                    <div><span class="bold">Match Factors:</span> Perfect specialization match, excellent temperament & obedience</div>
+                </div>`);
+                
+                // No good second match for this specific criteria
+                writeToTerminal(`<span class="info">No other animals currently meet the minimum threshold for this service role.</span>`);
+                
+                writeToTerminal(`<span class="help-text">The service matching algorithm prioritizes animals specially trained for the required service type.</span>`);
+                writeToTerminal(`<span class="help-text">Bella scored highest due to her exact specialization match and excellent temperament and obedience scores.</span>`);
+                writeToTerminal(`<span class="info">Type 'menu' to return to main menu or try another command.</span>`);
+            }, 1000);
+        }
+        
+        // Show priority matching demo
+        function showPriorityMatching() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Priority Queue Matching Algorithm Demo</span>`);
+            writeToTerminal(`This algorithm uses a priority queue data structure to match animals based on prioritized attributes.`);
+            writeToTerminal(`<span class="info">Simulation: Finding horses for equine therapy programs</span>`);
+            
+            // Simulated priority criteria
+            writeToTerminal(`<span class="bold">Matching Criteria:</span>`);
+            writeToTerminal(`- Animal Type: <span class="info">Horse</span>`);
+            writeToTerminal(`<span class="bold">Priority Attributes (in order):</span>`);
+            writeToTerminal(`1. <span class="info">Training Specialization</span> (Must be "Therapy")`);
+            writeToTerminal(`2. <span class="info">Temperament</span> (Higher is better)`);
+            writeToTerminal(`3. <span class="info">Ground Manners</span> (Higher is better)`);
+            writeToTerminal(`4. <span class="info">Riding Safe</span> (Must be true)`);
+            
+            writeToTerminal(`<span class="bold">Running priority queue matching algorithm...</span>`);
+            
+            // Simulated delay
+            setTimeout(() => {
+                writeToTerminal(`<span class="success">✓ Priority queue processing complete</span>`);
+                writeToTerminal(`<span class="bold">Match Results (in priority order):</span>`);
+                
+                // Result 1 - Highest priority
+                writeToTerminal(`<div class="animal-card">
+                    <span class="match-score">Priority 1</span>
+                    <div><span class="bold">Name:</span> Thunder (ID: H001)</div>
+                    <div><span class="bold">Breed:</span> Quarter Horse</div>
+                    <div><span class="bold">Training Specialization:</span> Therapy</div>
+                    <div><span class="bold">Temperament:</span> 4/5</div>
+                    <div><span class="bold">Ground Manners:</span> 5/5</div>
+                    <div><span class="bold">Riding Safe:</span> Yes</div>
+                    <div><span class="bold">Priority Factors:</span> Meets all priority criteria with highest scores</div>
+                </div>`);
+                
+                // Show how priority queue works
+                writeToTerminal(`<span class="info bold">Priority Queue Operation:</span>`);
+                writeToTerminal(`<span class="help-text">1. The algorithm enqueues each horse with a calculated priority score</span>`);
+                writeToTerminal(`<span class="help-text">2. Priority is determined by first checking the highest priority attribute (Training Specialization)</span>`);
+                writeToTerminal(`<span class="help-text">3. When multiple animals match the highest priority, the next priority attribute is checked</span>`);
+                writeToTerminal(`<span class="help-text">4. The algorithm dequeues animals in priority order until reaching the limit</span>`);
+                
+                writeToTerminal(`<span class="info">Type 'menu' to return to main menu or try another command.</span>`);
+            }, 1000);
+        }
+        
+        // Show algorithm information
+        function showAlgorithmInfo() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Animal Matching Algorithms Information</span>`);
+            writeToTerminal(`The Grazios Rescue System implements three advanced matching algorithms, each optimized for different use cases:`);
+            
+            // Weighted Matching
+            writeToTerminal(`<span class="bold">1. Weighted Attribute Matching</span>`);
+            writeToTerminal(`This algorithm calculates match scores based on how well animals match specified criteria, with customizable weights for each attribute.`);
+            writeToTerminal(`<span class="help-text">- Numeric attributes use similarity calculations</span>`);
+            writeToTerminal(`<span class="help-text">- Boolean attributes use exact matches</span>`);
+            writeToTerminal(`<span class="help-text">- Array attributes calculate overlap percentages</span>`);
+            writeToTerminal(`<span class="help-text">- Scores are normalized to a 0-100 scale</span>`);
+            writeToTerminal(`<span class="help-text">- Time Complexity: O(n × m) where n is the number of animals and m is the number of attributes</span>`);
+            
+            // Service Matching
+            writeToTerminal(`<span class="bold">2. Service Animal Matching</span>`);
+            writeToTerminal(`This specialized algorithm is designed for matching service animals to specific client needs.`);
+            writeToTerminal(`<span class="help-text">- Base eligibility determined first (training status, availability)</span>`);
+            writeToTerminal(`<span class="help-text">- Service-specific attributes evaluated with appropriate weights</span>`);
+            writeToTerminal(`<span class="help-text">- Special handling for different service types (therapy, service, search, equine therapy)</span>`);
+            writeToTerminal(`<span class="help-text">- Client-specific needs factored into scoring algorithm</span>`);
+            
+            // Priority Queue
+            writeToTerminal(`<span class="bold">3. Priority Queue Matching</span>`);
+            writeToTerminal(`This algorithm uses a priority queue data structure to prioritize animals based on attribute importance.`);
+            writeToTerminal(`<span class="help-text">- Priority queue implementation using an ordered array</span>`);
+            writeToTerminal(`<span class="help-text">- O(n) insertion and O(1) dequeuing operations</span>`);
+            writeToTerminal(`<span class="help-text">- Attributes processed in priority order with decreasing weight values</span>`);
+            writeToTerminal(`<span class="help-text">- Time Complexity: O(n × p + n log n) where n is the number of animals and p is the number of priority attributes</span>`);
+            
+            writeToTerminal(`<span class="info">Type 'menu' to return to main menu or try another command.</span>`);
+        }
+        
+        // Set initial focus to input
+        inputElement.focus();
+        
+        // Event listener to keep focus on input when clicking anywhere in terminal
+        document.querySelector('.terminal').addEventListener('click', () => {
+            inputElement.focus();
+        });
+    </script>
+</body>
+</html>
