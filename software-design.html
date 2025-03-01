@@ -372,17 +372,29 @@
          * @returns {void}
          */
         function showMainMenu() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">Grazios Rescue System - Software Design v1.0.0</span>`);
-            writeToTerminal(`Welcome to the Grazios Rescue System Software Design Demonstration!`);
-            writeToTerminal(`<span class="info">Please select an option to explore the system architecture:</span>`);
-            writeToTerminal(`<span class="menu-option" onclick="showSystemOverview()">1. System Overview</span> - Comprehensive architecture breakdown`);
-            writeToTerminal(`<span class="menu-option" onclick="showBackendStructure()">2. Backend Structure</span> - Explore project directory and components`);
-            writeToTerminal(`<span class="menu-option" onclick="showDatabaseIntegration()">3. Database Integration</span> - MongoDB Atlas connection details`);
-            writeToTerminal(`<span class="menu-option" onclick="showKeyComponents()">4. Key Components</span> - Detailed look at core services`);
-            writeToTerminal(`<span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands`);
-            writeToTerminal(`<span class="menu-option" onclick="returnToHomePage()">6. Home</span> - Return to GitHub Pages`);
-        }
+    // Clear the terminal first
+    outputElement.innerHTML = '';
+    
+    // Recreate the initial display exactly as it appears when the page loads
+    outputElement.innerHTML = `
+        <p class="info bold">Grazios Rescue System - Software Design v1.0.0</p>
+        <p>Initializing system architecture modules...</p>
+        <p class="success">✓ Backend Components Loaded</p>
+        <p class="success">✓ Database Connections Initialized</p>
+        <p class="success">✓ Service Modules Ready</p>
+        <p>Welcome to the Grazios Rescue System Software Design Demonstration!</p>
+        <p class="info">Please select an option to explore the system architecture:</p>
+        <p><span class="menu-option" onclick="showSystemOverview()">1. System Overview</span> - Comprehensive architecture breakdown</p>
+        <p><span class="menu-option" onclick="showBackendStructure()">2. Backend Structure</span> - Explore project directory and components</p>
+        <p><span class="menu-option" onclick="showDatabaseIntegration()">3. Database Integration</span> - MongoDB Atlas connection details</p>
+        <p><span class="menu-option" onclick="showKeyComponents()">4. Key Components</span> - Detailed look at core services</p>
+        <p><span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands</p>
+        <p><span class="menu-option" onclick="returnToHomePage()">6. Home</span> - Return to GitHub Pages</p>
+    `;
+    
+    // Ensure terminal scrolls to top so users can see all menu options
+    outputElement.scrollTop = 0;
+}
         
         /**
          * Displays help information
