@@ -245,10 +245,14 @@
          * 
          * @author Adam Vosburg
          * @institution Southern New Hampshire University (SNHU)
-         * @version 1.0.0
+         * @version 1.0.1
          */
 
-        // DOM element references for terminal interaction
+        /**
+         * DOM element references for terminal interaction
+         * @type {HTMLElement} outputElement - Reference to the terminal output container
+         * @type {HTMLElement} inputElement - Reference to the terminal input field
+         */
         const outputElement = document.getElementById('terminal-output');
         const inputElement = document.getElementById('terminal-input');
         
@@ -257,6 +261,7 @@
          * 
          * @function returnToHomePage
          * @description Redirects the user to the main portfolio page
+         * @returns {void}
          */
         function returnToHomePage() {
             try {
@@ -272,6 +277,7 @@
          * @function handleInput
          * @param {Event} event - Keyboard event triggered by user input
          * @description Processes user commands and executes corresponding actions
+         * @returns {void}
          */
         function handleInput(event) {
             if (event.key === 'Enter') {
@@ -312,6 +318,9 @@
                         case '6':
                             returnToHomePage();
                             break;
+                        case 'menu':
+                            showMainMenu();
+                            break;
                         default:
                             writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
                             writeToTerminal(`Type 'help' to see available commands.`);
@@ -331,6 +340,7 @@
          * @function writeToTerminal
          * @param {string} text - Text to be displayed in the terminal
          * @description Appends text to the terminal output and scrolls to bottom
+         * @returns {void}
          */
         function writeToTerminal(text) {
             try {
@@ -346,6 +356,7 @@
          * 
          * @function clearTerminal
          * @description Resets terminal output and displays initial message
+         * @returns {void}
          */
         function clearTerminal() {
             outputElement.innerHTML = '';
@@ -354,10 +365,31 @@
         }
         
         /**
+         * Displays the main menu options
+         * 
+         * @function showMainMenu
+         * @description Shows the main menu with all available navigation options
+         * @returns {void}
+         */
+        function showMainMenu() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">Grazios Rescue System - Software Design v1.0.0</span>`);
+            writeToTerminal(`Welcome to the Grazios Rescue System Software Design Demonstration!`);
+            writeToTerminal(`<span class="info">Please select an option to explore the system architecture:</span>`);
+            writeToTerminal(`<span class="menu-option" onclick="showSystemOverview()">1. System Overview</span> - Comprehensive architecture breakdown`);
+            writeToTerminal(`<span class="menu-option" onclick="showBackendStructure()">2. Backend Structure</span> - Explore project directory and components`);
+            writeToTerminal(`<span class="menu-option" onclick="showDatabaseIntegration()">3. Database Integration</span> - MongoDB Atlas connection details`);
+            writeToTerminal(`<span class="menu-option" onclick="showKeyComponents()">4. Key Components</span> - Detailed look at core services`);
+            writeToTerminal(`<span class="menu-option" onclick="showHelp()">5. Help</span> - Show available commands`);
+            writeToTerminal(`<span class="menu-option" onclick="returnToHomePage()">6. Home</span> - Return to GitHub Pages`);
+        }
+        
+        /**
          * Displays help information
          * 
          * @function showHelp
          * @description Outputs available commands and their descriptions
+         * @returns {void}
          */
         function showHelp() {
             writeToTerminal(`<span class="info bold">Available Commands:</span>`);
@@ -366,8 +398,9 @@
             writeToTerminal(`- <span class="info">3, database</span>: Show database integration details`);
             writeToTerminal(`- <span class="info">4, components</span>: Explore key system components`);
             writeToTerminal(`- <span class="info">5, help</span>: Show this help information`);
+            writeToTerminal(`- <span class="info">menu</span>: Return to main menu`);
             writeToTerminal(`- <span class="info">clear</span>: Clear the terminal`);
-            writeToTerminal(`- <span class="info">home, exit</span>: Return to GitHub Pages`);
+            writeToTerminal(`- <span class="info">home, exit, 6</span>: Return to GitHub Pages`);
         }
         
         /**
@@ -375,6 +408,7 @@
          * 
          * @function showSystemOverview
          * @description Provides a comprehensive breakdown of the system architecture
+         * @returns {void}
          */
         function showSystemOverview() {
             clearTerminal();
@@ -410,6 +444,7 @@
          * 
          * @function showBackendStructure
          * @description Illustrates the directory and component organization of the backend
+         * @returns {void}
          */
         function showBackendStructure() {
             clearTerminal();
@@ -459,6 +494,7 @@
          * 
          * @function showDatabaseIntegration
          * @description Provides insights into the MongoDB Atlas database connection
+         * @returns {void}
          */
         function showDatabaseIntegration() {
             clearTerminal();
@@ -500,6 +536,7 @@ const connectDB = async () => {
          * 
          * @function showKeyComponents
          * @description Explores the core services and their responsibilities
+         * @returns {void}
          */
         function showKeyComponents() {
             clearTerminal();
@@ -507,6 +544,13 @@ const connectDB = async () => {
             
             writeToTerminal(`<span class="highlight">1. Authentication Service</span>`);
             writeToTerminal(`<div class="code-block">class AuthService {
+    /**
+     * Authenticates a user with provided credentials
+     * @param {Object} credentials - User login credentials
+     * @param {string} credentials.email - User's email address
+     * @param {string} credentials.password - User's password
+     * @returns {Object} Authentication result with user data and token
+     */
     async authenticateUser(credentials) {
         // Validate user credentials
         const user = await UserModel.findByCredentials(
@@ -523,6 +567,11 @@ const connectDB = async () => {
         };
     }
     
+    /**
+     * Generates a JWT token for authenticated user
+     * @param {Object} user - User document from database
+     * @returns {string} JWT token for authorization
+     */
     generateJWTToken(user) {
         return jwt.sign(
             { id: user._id, role: user.role },
@@ -534,6 +583,11 @@ const connectDB = async () => {
             
             writeToTerminal(`\n<span class="highlight">2. Animal Matching Service</span>`);
             writeToTerminal(`<div class="code-block">class AnimalMatchService {
+    /**
+     * Finds the best animal matches based on requirements
+     * @param {Object} requirements - Matching criteria and preferences
+     * @returns {Array} Top matching animals with scores
+     */
     async findBestMatch(requirements) {
         // Advanced matching algorithm
         const candidates = await this.filterCandidates(requirements);
@@ -547,6 +601,12 @@ const connectDB = async () => {
             .slice(0, 3); // Top 3 matches
     }
     
+    /**
+     * Calculates compatibility score between animal and requirements
+     * @param {Object} animal - Animal document from database
+     * @param {Object} requirements - Matching criteria and preferences
+     * @returns {number} Compatibility score
+     */
     calculateMatchScore(animal, requirements) {
         // Weighted matching algorithm logic
         let totalScore = 0;
@@ -571,7 +631,10 @@ const connectDB = async () => {
         // Set initial focus to input
         inputElement.focus();
         
-        // Event listener to keep focus on input when clicking anywhere in terminal
+        /**
+         * Event listener to keep focus on input when clicking anywhere in terminal
+         * Ensures seamless interaction with the terminal interface
+         */
         document.querySelector('.terminal').addEventListener('click', () => {
             inputElement.focus();
         });
