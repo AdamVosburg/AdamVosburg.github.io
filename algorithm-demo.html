@@ -309,28 +309,31 @@
                 // Echo the command
                 writeToTerminal(`<span class="terminal-prompt">user@grazios:~$</span> ${command}`);
                 
-                // Command processing logic
+                // Process command
                 try {
                     switch (command) {
                         case 'help':
                         case '5':
                             showHelp();
                             break;
-                        case 'weighted':
                         case '1':
+                        case 'weighted':
+                        case 'weighted matching':
                             showWeightedMatching();
                             break;
-                        case 'service':
                         case '2':
+                        case 'service':
+                        case 'service matching':
                             showServiceMatching();
                             break;
-                        case 'priority':
                         case '3':
+                        case 'priority':
+                        case 'priority matching':
                             showPriorityMatching();
                             break;
-                        case 'algorithm':
-                        case 'info':
                         case '4':
+                        case 'info':
+                        case 'algorithm':
                             showAlgorithmInfo();
                             break;
                         case 'clear':
@@ -352,7 +355,7 @@
                     writeToTerminal(`<span class="error">Error processing command: ${error.message}</span>`);
                 }
                 
-                // Ensure terminal scrolls to bottom
+                // Scroll to bottom
                 outputElement.scrollTop = outputElement.scrollHeight;
             }
         }
