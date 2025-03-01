@@ -13,7 +13,7 @@
          * 
          * @author Adam Vosburg
          * @institution Southern New Hampshire University (SNHU)
-         * @version 1.0.0
+         * @version 1.0.1
          */
         :root {
             --terminal-bg: #2b2b2b;
@@ -225,7 +225,7 @@
             <div class="terminal-title">grazios-rescue-system</div>
         </div>
         <div class="terminal-output" id="terminal-output">
-            <p class="info bold">Grazios Rescue System v1.0.0</p>
+            <p class="info bold">Grazios Rescue System v1.0.1</p>
             <p>Initializing system modules...</p>
             <p class="success">✓ Animal modules loaded</p>
             <p class="success">✓ Matching algorithms initialized</p>
@@ -383,7 +383,7 @@
          */
         function clearTerminal() {
             outputElement.innerHTML = '';
-            writeToTerminal(`<span class="info bold">Grazios Rescue System v1.0.0</span>`);
+            writeToTerminal(`<span class="info bold">Grazios Rescue System v1.0.1</span>`);
             writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu or 'help' for available commands.`);
         }
         
@@ -638,7 +638,7 @@
             writeToTerminal(`<span class="help-text">- Time Complexity: O(n × p + n log n) where n is the number of animals and p is the number of priority attributes</span>`);
             
             writeToTerminal(`<span class="info">Type 'menu' to return to main menu or try another command.</span>`);
-        }
+        }}
         
         /**
          * Set initial focus on the input field when the page loads
