@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grazios Rescue System - Database Demo</title>
+    <style>
+        /* 
+         * Terminal-Inspired User Interface Stylesheet
+         * 
+         * @description Creates a professional, code-editor-like interface 
+         * for presenting database architecture concepts
+         * 
+         * @author Adam Vosburg
+         * @institution Southern New Hampshire University (SNHU)
+         * @version 1.0.1
+         */
+        :root {
+            --terminal-bg: #2b2b2b;
+            --terminal-text: #f0f0f0;
+            --terminal-green: #8bc34a;
+            --terminal-blue: #64b5f6;
+            --terminal-yellow: #ffeb3b;
+            --terminal-red: #ff5252;
+            --terminal-purple: #ce93d8;
+            --terminal-orange: #ffab40;
+        }
+        
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: var(--terminal-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--terminal-green);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        .description {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            line-height: 1.5;
+            text-align: center;
+            color: var(--terminal-text);
+            opacity: 0.8;
+        }
+        
+        .terminal {
+            background-color: var(--terminal-bg);
+            border-radius: 5px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .terminal-header {
+            background-color: #1a1a1a;
+            padding: 8px 12px;
+            border-radius: 5px 5px 0 0;
+            margin: -20px -20px 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+        
+        .terminal-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-close {
+            background-color: #ff5f56;
+        }
+        
+        .terminal-minimize {
+            background-color: #ffbd2e;
+        }
+        
+        .terminal-maximize {
+            background-color: #27c93f;
+        }
+        
+        .terminal-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .terminal-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        
+        .terminal-output p {
+            margin: 0 0 8px;
+            line-height: 1.5;
+        }
+        
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-prompt {
+            color: var(--terminal-green);
+            margin-right: 8px;
+        }
+        
+        .terminal-input {
+            background-color: transparent;
+            border: none;
+            color: var(--terminal-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+        }
+        
+        .success {
+            color: var(--terminal-green);
+        }
+        
+        .info {
+            color: var(--terminal-blue);
+        }
+        
+        .warning {
+            color: var(--terminal-yellow);
+        }
+        
+        .error {
+            color: var(--terminal-red);
+        }
+        
+        .highlight {
+            color: var(--terminal-purple);
+        }
+
+        .collection {
+            color: var(--terminal-orange);
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+        
+        .menu-option {
+            color: var(--terminal-blue);
+            cursor: pointer;
+        }
+        
+        .menu-option:hover {
+            text-decoration: underline;
+        }
+        
+        .code-block {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        
+        .help-text {
+            color: #888;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            color: var(--terminal-blue);
+        }
+
+        /* MongoDB Schema Visualization Styles */
+        .schema-container {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .schema-title {
+            color: var(--terminal-orange);
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .schema-field {
+            margin-left: 15px;
+            margin-bottom: 3px;
+        }
+
+        .schema-field-name {
+            color: var(--terminal-blue);
+        }
+
+        .schema-field-type {
+            color: var(--terminal-green);
+        }
+
+        .schema-field-required {
+            color: var(--terminal-red);
+        }
+
+        .schema-field-ref {
+            color: var(--terminal-purple);
+        }
+
+        .schema-method {
+            margin-left: 15px;
+            margin-top: 10px;
+            color: var(--terminal-yellow);
+        }
+
+        /* Database Relationship Diagram */
+        .db-diagram {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .db-entity {
+            background-color: rgba(100, 181, 246, 0.2);
+            border: 1px solid var(--terminal-blue);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .db-entity-title {
+            color: var(--terminal-blue);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .db-relationship {
+            margin: 5px 0;
+            text-align: center;
+            color: var(--terminal-purple);
+        }
+
+        .db-relationship-line {
+            border-left: 1px solid var(--terminal-purple);
+            height: 20px;
+            width: 1px;
+            margin: 0 auto;
+        }
+
+        /* Query Results Visualization */
+        .query-result {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid var(--terminal-green);
+        }
+
+        .result-count {
+            color: var(--terminal-green);
+            margin-bottom: 5px;
+        }
+
+        .json-key {
+            color: var(--terminal-blue);
+        }
+
+        .json-string {
+            color: var(--terminal-green);
+        }
+
+        .json-number {
+            color: var(--terminal-orange);
+        }
+
+        .json-boolean {
+            color: var(--terminal-purple);
+        }
+
+        .json-null {
+            color: var(--terminal-red);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Grazios Rescue System</h1>
+        <div class="description">
+            MongoDB Database Architecture and Visualization
+        </div>
+    </header>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-controls">
+                <div class="terminal-control terminal-close" onclick="returnToHomePage()"></div>
+                <div class="terminal-control terminal-minimize"></div>
+                <div class="terminal-control terminal-maximize"></div>
+            </div>
+            <div class="terminal-title">mongodb-database-architecture</div>
+        </div>
+        <div class="terminal-output" id="terminal-output">
+            <p class="info bold">Grazios Rescue System - Database Architecture v1.0.0</p>
+            <p>Initializing database module visualization...</p>
+            <p class="success">✓ Schema models loaded</p>
+            <p class="success">✓ Relationship diagrams initialized</p>
+            <p class="success">✓ Query visualization ready</p>
+            <p>Welcome to the Grazios Rescue System Database Architecture Demonstration!</p>
+            <p class="info">Please select an option to explore the database design:</p>
+            <p><span class="menu-option" onclick="showDatabaseOverview()">1. Database Overview</span> - MongoDB architecture overview</p>
+            <p><span class="menu-option" onclick="showSchemaDesign()">2. Schema Design</span> - MongoDB document schemas</p>
+            <p><span class="menu-option" onclick="showDataRelationships()">3. Data Relationships</span> - Collection relationships</p>
+            <p><span class="menu-option" onclick="showQueryOperations()">4. Query Operations</span> - MongoDB query examples</p>
+            <p><span class="menu-option" onclick="showDatabaseSecurity()">5. Database Security</span> - Authentication and access control</p>
+            <p><span class="menu-option" onclick="showHelp()">6. Help</span> - Show available commands</p>
+            <p><span class="menu-option" onclick="returnToHomePage()">7. Home</span> - Return to GitHub Pages</p>
+        </div>
+        <div class="terminal-input-container">
+            <span class="terminal-prompt">user@grazios-db:~$</span>
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Type a command or select an option above..." onkeydown="handleInput(event)">
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Grazios Rescue System - Database Visualization Terminal
+         * 
+         * @description Provides an interactive exploration of the system's 
+         * MongoDB database architecture, design principles, and implementation
+         * 
+         * @author Adam Vosburg
+         * @institution Southern New Hampshire University (SNHU)
+         * @version 1.0.1
+         */
+
+        /**
+         * DOM element references for terminal interaction
+         * @type {HTMLElement} outputElement - Reference to the terminal output container
+         * @type {HTMLElement} inputElement - Reference to the terminal input field
+         */
+        const outputElement = document.getElementById('terminal-output');
+        const inputElement = document.getElementById('terminal-input');
+        
+        /**
+         * Handles terminal input events
+         * 
+         * @function handleInput
+         * @param {Event} event - Keyboard event triggered by user input
+         * @description Processes user commands and executes corresponding actions
+         * @returns {void}
+         */
+        function handleInput(event) {
+            if (event.key === 'Enter') {
+                const command = inputElement.value.trim().toLowerCase();
+                inputElement.value = '';
+                
+                // Echo the command
+                writeToTerminal(`<span class="terminal-prompt">user@grazios-db:~$</span> ${command}`);
+                
+                // Command processing logic
+                try {
+                    switch (command) {
+                        case 'help':
+                        case '6':
+                            showHelp();
+                            break;
+                        case 'overview':
+                        case '1':
+                            showDatabaseOverview();
+                            break;
+                        case 'schema':
+                        case '2':
+                            showSchemaDesign();
+                            break;
+                        case 'relationships':
+                        case '3':
+                            showDataRelationships();
+                            break;
+                        case 'query':
+                        case '4':
+                            showQueryOperations();
+                            break;
+                        case 'security':
+                        case '5':
+                            showDatabaseSecurity();
+                            break;
+                        case 'clear':
+                            clearTerminal();
+                            break;
+                        case 'menu':
+                            showMainMenu();
+                            break;
+                        case 'home':
+                        case 'exit':
+                        case '7':
+                            returnToHomePage();
+                            break;
+                        default:
+                            writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
+                            writeToTerminal(`Type 'help' to see available commands.`);
+                    }
+                } catch (error) {
+                    writeToTerminal(`<span class="error">Error processing command: ${error.message}</span>`);
+                }
+                
+                // Ensure terminal scrolls to bottom
+                outputElement.scrollTop = outputElement.scrollHeight;
+            }
+        }
+        
+        /**
+         * Returns user to the main GitHub Pages index
+         * 
+         * @function returnToHomePage
+         * @description Redirects the user to the main portfolio page
+         * @returns {void}
+         */
+        function returnToHomePage() {
+            try {
+                window.location.href = 'index.html';
+            } catch (error) {
+                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
+            }
+        }
+        
+        /**
+         * Writes output to the terminal
+         * 
+         * @function writeToTerminal
+         * @param {string} text - Text to be displayed in the terminal
+         * @description Appends text to the terminal output and scrolls to bottom
+         * @returns {void}
+         */
+        function writeToTerminal(text) {
+            try {
+                outputElement.innerHTML += `<p>${text}</p>`;
+                outputElement.scrollTop = outputElement.scrollHeight;
+            } catch (error) {
+                console.error('Terminal writing error:', error);
+            }
+        }
+        
+        /**
+         * Clears the terminal output
+         * 
+         * @function clearTerminal
+         * @description Resets terminal output and displays initial message
+         * @returns {void}
+         */
+        function clearTerminal() {
+            outputElement.innerHTML = '';
+            writeToTerminal(`<span class="info bold">Grazios Rescue System - Database Architecture v1.0.0</span>`);
+            writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu or 'help' for available commands.`);
+        }
+        
+        /**
+         * Displays the main menu options
+         * 
+         * @function showMainMenu
+         * @description Shows the main menu with all available navigation options
+         * @returns {void}
+         */
+        function showMainMenu() {
+            clearTerminal();
+            writeToTerminal(`Welcome to the Grazios Rescue System Database Architecture Demonstration!`);
+            writeToTerminal(`<span class="info">Please select an option to explore the database design:</span>`);
+            writeToTerminal(`<span class="menu-option" onclick="showDatabaseOverview()">1. Database Overview</span> - MongoDB architecture overview`);
+            writeToTerminal(`<span class="menu-option" onclick="showSchemaDesign()">2. Schema Design</span> - MongoDB document schemas`);
+            writeToTerminal(`<span class="menu-option" onclick="showDataRelationships()">3. Data Relationships</span> - Collection relationships`);
+            writeToTerminal(`<span class="menu-option" onclick="showQueryOperations()">4. Query Operations</span> - MongoDB query examples`);
+            writeToTerminal(`<span class="menu-option" onclick="showDatabaseSecurity()">5. Database Security</span> - Authentication and access control`);
+            writeToTerminal(`<span class="menu-option" onclick="showHelp()">6. Help</span> - Show available commands`);
+            writeToTerminal(`<span class="menu-option" onclick="returnToHomePage()">7. Home</span> - Return to GitHub Pages`);
+        }
+        
+        /**
+         * Displays help information
+         * 
+         * @function showHelp
+         * @description Outputs available commands and their descriptions
+         * @returns {void}
+         */
+        function showHelp() {
+            writeToTerminal(`<span class="info bold">Available Commands:</span>`);
+            writeToTerminal(`- <span class="info">1, overview</span>: Show database architecture overview`);
+            writeToTerminal(`- <span class="info">2, schema</span>: Explore MongoDB schema design`);
+            writeToTerminal(`- <span class="info">3, relationships</span>: View data relationships`);
+            writeToTerminal(`- <span class="info">4, query</span>: See query operation examples`);
+            writeToTerminal(`- <span class="info">5, security</span>: Learn about database security`);
+            writeToTerminal(`- <span class="info">6, help</span>: Show this help information`);
+            writeToTerminal(`- <span class="info">menu</span>: Return to main menu`);
+            writeToTerminal(`- <span class="info">clear</span>: Clear the terminal`);
+            writeToTerminal(`- <span class="info">home, exit, 7</span>: Return to GitHub Pages`);
+            writeToTerminal(`<span class="help-text">You can click on menu options or type commands.</span>`);
+        }
+        
+        /**
+         * Displays database architecture overview
+         * 
+         * @function showDatabaseOverview
+         * @description Provides a comprehensive overview of the MongoDB architecture
+         * @returns {void}
+         */
+        function showDatabaseOverview() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Database Architecture Overview</span>`);
+            writeToTerminal(`The Grazios Rescue System implements a document-oriented database design using MongoDB Atlas, a cloud-based MongoDB service. This approach offers several advantages over traditional relational databases for this application:`);
+            
+            writeToTerminal(`\n<span class="highlight">Key MongoDB Features Used:</span>`);
+            writeToTerminal(`- <span class="bold">Document Model:</span> Stores data in flexible, JSON-like documents`);
+            writeToTerminal(`- <span class="bold">Discriminator Pattern:</span> Implements inheritance for different animal types`);
+            writeToTerminal(`- <span class="bold">Schema Validation:</span> Ensures data integrity while maintaining flexibility`);
+            writeToTerminal(`- <span class="bold">Referencing:</span> Creates relationships between collections`);
+            writeToTerminal(`- <span class="bold">Indexing:</span> Optimizes query performance`);
+            
+            writeToTerminal(`\n<span class="highlight">Database Architecture:</span>`);
+            writeToTerminal(`<div class="code-block">mongodb-atlas-cluster/
+├── <span class="collection">RescueAnimal Collection</span> (with discriminators)
+│   ├── Dog documents
+│   ├── Monkey documents
+│   ├── Bird documents
+│   └── Horse documents
+├── <span class="collection">MedicalRecord Collection</span>
+├── <span class="collection">Medication Collection</span>
+├── <span class="collection">VaccinationSchedule Collection</span>
+├── <span class="collection">TrainingProgram Collection</span>
+├── <span class="collection">TrainingSession Collection</span>
+└── <span class="collection">User Collection</span></div>`);
+            
+            writeToTerminal(`\n<span class="highlight">Collection Design Principles:</span>`);
+            writeToTerminal(`- <span class="bold">Single Collection Inheritance:</span> All animal types share the RescueAnimal collection`);
+            writeToTerminal(`- <span class="bold">Normalized References:</span> Related data stored in separate collections and referenced`);
+            writeToTerminal(`- <span class="bold">Strategic Indexing:</span> Optimized for common query patterns`);
+            writeToTerminal(`- <span class="bold">Schema Validation:</span> Each collection enforces document structure`);
+            
+            writeToTerminal(`\n<span class="info">Type 'schema' to explore MongoDB schemas or 'menu' to return to main menu.</span>`);
+        }
+        
+        /**
+         * Displays schema design details
+         * 
+         * @function showSchemaDesign
+         * @description Shows MongoDB schema implementations for different document types
+         * @returns {void}
+         */
+        function showSchemaDesign() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Schema Design</span>`);
+            writeToTerminal(`The Grazios Rescue System uses Mongoose schema definitions to structure data and enforce validation. Below are the key schema definitions with their fields, types, and relationships:`);
+            
+            writeToTerminal(`\n<span class="highlight">Base Schema: RescueAnimal</span>`);
+            writeToTerminal(`<div class="schema-container">
+    <div class="schema-title">RescueAnimal Schema</div>
+    <div class="schema-field"><span class="schema-field-name">name:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">species:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">age:</span> <span class="schema-field-type">Number</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">gender:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(enum: ['Male', 'Female', 'Unknown'])</span></div>
+    <div class="schema-field"><span class="schema-field-name">weight:</span> <span class="schema-field-type">Number</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">microchipId:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(default: uuid)</span></div>
+    <div class="schema-field"><span class="schema-field-name">intakeDate:</span> <span class="schema-field-type">Date</span> <span class="schema-field-required">(default: now)</span></div>
+    <div class="schema-field"><span class="schema-field-name">trainingStatus:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(enum)</span></div>
+    <div class="schema-field"><span class="schema-field-name">reserved:</span> <span class="schema-field-type">Boolean</span> <span class="schema-field-required">(default: false)</span></div>
+    <div class="schema-field"><span class="schema-field-name">assignedTrainer:</span> <span class="schema-field-type">ObjectId</span> <span class="schema-field-ref">(ref: 'Trainer')</span></div>
+    <div class="schema-field"><span class="schema-field-name">medicalRecords:</span> <span class="schema-field-type">[ObjectId]</span> <span class="schema-field-ref">(ref: 'MedicalRecord')</span></div>
+    <div class="schema-field"><span class="schema-field-name">trainingPrograms:</span> <span class="schema-field-type">[ObjectId]</span> <span class="schema-field-ref">(ref: 'TrainingProgram')</span></div>
+    <div class="schema-method">Methods: isAvailableForService(), needsMedicalCheck(), addMedicalRecord(), updateTrainingStatus()</div>
+</div>`);
+            
+            writeToTerminal(`\n<span class="highlight">Dog Schema (RescueAnimal Discriminator)</span>`);
+            writeToTerminal(`<div class="schema-container">
+    <div class="schema-title">Dog Schema (extends RescueAnimal)</div>
+    <div class="schema-field"><span class="schema-field-name">breed:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">serviceType:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(enum: ['SERVICE', 'THERAPY', 'SEARCH'])</span></div>
+    <div class="schema-field"><span class="schema-field-name">obedienceLevel:</span> <span class="schema-field-type">Number</span> <span class="schema-field-required">(min: 1, max: 5)</span></div>
+    <div class="schema-field"><span class="schema-field-name">specializations:</span> <span class="schema-field-type">[String]</span></div>
+    <div class="schema-method">Methods: getDogSpecializations(), addSpecialization(), initializeMedicalRecord(), initializeTrainingProgram()</div>
+</div>`);
+            
+            writeToTerminal(`\n<span class="highlight">Medical Record Schema</span>`);
+            writeToTerminal(`<div class="schema-container">
+    <div class="schema-title">MedicalRecord Schema</div>
+    <div class="schema-field"><span class="schema-field-name">recordId:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(default: uuid)</span></div>
+    <div class="schema-field"><span class="schema-field-name">animalId:</span> <span class="schema-field-type">ObjectId</span> <span class="schema-field-ref">(ref: 'RescueAnimal')</span> <span class="schema-field-required">(required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">dateOfService:</span> <span class="schema-field-type">Date</span> <span class="schema-field-required">(default: now)</span></div>
+    <div class="schema-field"><span class="schema-field-name">recordType:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(enum: ['EXAM', 'VACCINATION', 'TREATMENT', 'FOLLOWUP'])</span></div>
+    <div class="schema-field"><span class="schema-field-name">veterinarian:</span> <span class="schema-field-type">ObjectId</span> <span class="schema-field-ref">(ref: 'User')</span></div>
+    <div class="schema-field"><span class="schema-field-name">diagnosis:</span> <span class="schema-field-type">String</span></div>
+    <div class="schema-field"><span class="schema-field-name">medications:</span> <span class="schema-field-type">[ObjectId]</span> <span class="schema-field-ref">(ref: 'Medication')</span></div>
+    <div class="schema-method">Methods: addExamRecord(), addVaccination(), addMedication()</div>
+</div>`);
+            
+            writeToTerminal(`\n<span class="highlight">User Schema</span>`);
+            writeToTerminal(`<div class="schema-container">
+    <div class="schema-title">User Schema</div>
+    <div class="schema-field"><span class="schema-field-name">username:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(required, unique)</span></div>
+    <div class="schema-field"><span class="schema-field-name">email:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(required, unique)</span></div>
+    <div class="schema-field"><span class="schema-field-name">password:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(hashed, required)</span></div>
+    <div class="schema-field"><span class="schema-field-name">role:</span> <span class="schema-field-type">String</span> <span class="schema-field-required">(enum: ['admin', 'trainer', 'veterinarian', 'staff'])</span></div>
+    <div class="schema-method">Pre-save hook: Password hashing</div>
+    <div class="schema-method">Methods: isValidPassword(), getFullName()</div>
+</div>`);
+            
+            writeToTerminal(`\n<span class="info">Type 'relationships' to see how these schemas are connected or 'menu' to return to main menu.</span>`);
+        }
+        
+        /**
+         * Displays data relationship diagrams
+         * 
+         * @function showDataRelationships
+         * @description Illustrates the relationships between different MongoDB collections
+         * @returns {void}
+         */
+        function showDataRelationships() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Data Relationships</span>`);
+            writeToTerminal(`The Grazios Rescue System uses MongoDB's reference-based relationships to connect related documents across collections. These relationships enable complex queries while maintaining data integrity.`);
+            
+            writeToTerminal(`\n<span class="highlight">RescueAnimal Inheritance Hierarchy</span>`);
+            writeToTerminal(`<div class="db-diagram">
+    <div class="db-entity">
+        <div class="db-entity-title">RescueAnimal (Base Collection)</div>
+        <div>All shared animal attributes</div>
+    </div>
+    <div class="db-relationship">Uses discriminatorKey: "animalType"</div>
+    <div class="db-relationship-line"></div>
+    <div style="display: flex; justify-content: space-between;">
+        <div class="db-entity" style="width: 22%">
+            <div class="db-entity-title">Dog</div>
+            <div>Dog-specific fields</div>
+        </div>
+        <div class="db-entity" style="width: 22%">
+            <div class="db-entity-title">Monkey</div>
+            <div>Monkey-specific fields</div>
+        </div>
+        <div class="db-entity" style="width: 22%">
+            <div class="db-entity-title">Bird</div>
+            <div>Bird-specific fields</div>
+        </div>
+        <div class="db-entity" style="width: 22%">
+            <div class="db-entity-title">Horse</div>
+            <div>Horse-specific fields</div>
+        </div>
+    </div>
+</div>
+
+            writeToTerminal(`\n<span class="highlight">Core Relationship Network</span>`);
+            writeToTerminal(`<div class="db-diagram">
+    <div class="db-entity">
+        <div class="db-entity-title">RescueAnimal</div>
+        <div>Central entity that relates to all other collections</div>
+    </div>
+    <div class="db-relationship">One-to-Many relationships</div>
+    <div class="db-relationship-line"></div>
+    <div style="display: flex; justify-content: space-between;">
+        <div class="db-entity" style="width: 30%">
+            <div class="db-entity-title">MedicalRecord</div>
+            <div>Animal.medicalRecords → [MedicalRecord._id]</div>
+        </div>
+        <div class="db-entity" style="width: 30%">
+            <div class="db-entity-title">TrainingProgram</div>
+            <div>Animal.trainingPrograms → [TrainingProgram._id]</div>
+        </div>
+        <div class="db-entity" style="width: 30%">
+            <div class="db-entity-title">VaccinationSchedule</div>
+            <div>Connected by Animal._id</div>
+        </div>
+    </div>
+    <div class="db-relationship-line"></div>
+    <div style="display: flex; justify-content: space-between;">
+        <div class="db-entity" style="width: 45%">
+            <div class="db-entity-title">User (Veterinarian/Trainer)</div>
+            <div>MedicalRecord.veterinarian → User._id</div>
+            <div>Animal.assignedTrainer → User._id</div>
+        </div>
+        <div class="db-entity" style="width: 45%">
+            <div class="db-entity-title">Medication</div>
+            <div>MedicalRecord.medications → [Medication._id]</div>
+        </div>
+    </div>
+</div>
+
+            writeToTerminal(`\n<span class="highlight">Data Relationship Implementation</span>`);
+            writeToTerminal(`The Grazios database uses MongoDB references in these ways:`);
+            writeToTerminal(`- <span class="bold">Direct References:</span> Store ObjectIds in fields (e.g., animal.assignedTrainer = trainerId)`);
+            writeToTerminal(`- <span class="bold">Array References:</span> Store arrays of ObjectIds for one-to-many relationships`);
+            writeToTerminal(`- <span class="bold">Bi-directional References:</span> Both parent and child documents reference each other when needed`);
+            writeToTerminal(`- <span class="bold">Population:</span> Using Mongoose's populate() to retrieve related documents in queries`);
+            
+            writeToTerminal(`\n<span class="info">Type 'query' to see example MongoDB queries or 'menu' to return to main menu.</span>`);
+        }
+        
+        /**
+         * Displays query operation examples
+         * 
+         * @function showQueryOperations
+         * @description Shows examples of MongoDB query operations and their results
+         * @returns {void}
+         */
+        function showQueryOperations() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Query Operations</span>`);
+            writeToTerminal(`The Grazios Rescue System leverages MongoDB's powerful query capabilities to retrieve, filter, and analyze data. Below are examples of common query operations used in the application:`);
+            
+            writeToTerminal(`\n<span class="highlight">Basic CRUD Operations</span>`);
+            
+            // Create
+            writeToTerminal(`<span class="bold">Creating a new Dog document:</span>`);
+            writeToTerminal(`<div class="code-block">// Creating a new Dog document
+const newDog = new Dog({
+  name: 'Rex',
+  species: 'Canine',
+  breed: 'German Shepherd',
+  age: 2,
+  gender: 'Male',
+  weight: 32.5,
+  serviceType: 'SERVICE',
+  obedienceLevel: 4,
+  specializations: ['Mobility Assistance', 'Retrieving Items']
+});
+
+await newDog.save();</div>`);
+            
+            // Read
+            writeToTerminal(`\n<span class="bold">Finding animals by criteria:</span>`);
+            writeToTerminal(`<div class="code-block">// Find all therapy dogs with high obedience level
+const therapyDogs = await Dog.find({
+  serviceType: 'THERAPY',
+  obedienceLevel: { $gte: 4 },
+  trainingStatus: 'Ready',
+  reserved: false
+});</div>`);
+            
+            writeToTerminal(`<div class="query-result">
+<div class="result-count">Results: 2 documents found</div>
+[
+  {
+    <span class="json-key">"_id"</span>: <span class="json-string">"60f7a9b7e85d22001f7c1a3b"</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"Luna"</span>,
+    <span class="json-key">"species"</span>: <span class="json-string">"Canine"</span>,
+    <span class="json-key">"breed"</span>: <span class="json-string">"Border Collie"</span>,
+    <span class="json-key">"age"</span>: <span class="json-number">2</span>,
+    <span class="json-key">"gender"</span>: <span class="json-string">"Female"</span>,
+    <span class="json-key">"serviceType"</span>: <span class="json-string">"THERAPY"</span>,
+    <span class="json-key">"obedienceLevel"</span>: <span class="json-number">4</span>,
+    <span class="json-key">"trainingStatus"</span>: <span class="json-string">"Ready"</span>,
+    <span class="json-key">"reserved"</span>: <span class="json-boolean">false</span>
+  },
+  {
+    <span class="json-key">"_id"</span>: <span class="json-string">"60f7a9c4e85d22001f7c1a3c"</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"Max"</span>,
+    <span class="json-key">"species"</span>: <span class="json-string">"Canine"</span>,
+    <span class="json-key">"breed"</span>: <span class="json-string">"Labrador Retriever"</span>,
+    <span class="json-key">"age"</span>: <span class="json-number">3</span>,
+    <span class="json-key">"gender"</span>: <span class="json-string">"Male"</span>,
+    <span class="json-key">"serviceType"</span>: <span class="json-string">"THERAPY"</span>,
+    <span class="json-key">"obedienceLevel"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"trainingStatus"</span>: <span class="json-string">"Ready"</span>,
+    <span class="json-key">"reserved"</span>: <span class="json-boolean">false</span>
+  }
+]</div>`);
+            
+            // Complex Query with Population
+            writeToTerminal(`\n<span class="bold">Complex query with population:</span>`);
+            writeToTerminal(`<div class="code-block">// Find an animal with its medical records and trainer
+const animalWithRecords = await RescueAnimal.findById(animalId)
+  .populate('medicalRecords')
+  .populate('assignedTrainer');</div>`);
+            
+            writeToTerminal(`<div class="query-result">
+<div class="result-count">Results: Document with populated references</div>
+{
+  <span class="json-key">"_id"</span>: <span class="json-string">"60f7a9b7e85d22001f7c1a3b"</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"Luna"</span>,
+  <span class="json-key">"species"</span>: <span class="json-string">"Canine"</span>,
+  <span class="json-key">"animalType"</span>: <span class="json-string">"Dog"</span>,
+  <span class="json-key">"breed"</span>: <span class="json-string">"Border Collie"</span>,
+  <span class="json-key">"medicalRecords"</span>: [
+    {
+      <span class="json-key">"_id"</span>: <span class="json-string">"60f8b234e22f33001ca7643d"</span>,
+      <span class="json-key">"recordType"</span>: <span class="json-string">"EXAM"</span>,
+      <span class="json-key">"diagnosis"</span>: <span class="json-string">"Healthy, routine checkup"</span>,
+      <span class="json-key">"dateOfService"</span>: <span class="json-string">"2023-08-01T14:22:00.000Z"</span>
+    }
+  ],
+  <span class="json-key">"assignedTrainer"</span>: {
+    <span class="json-key">"_id"</span>: <span class="json-string">"60f7b123e85d22001f7c1a42"</span>,
+    <span class="json-key">"firstName"</span>: <span class="json-string">"John"</span>,
+    <span class="json-key">"lastName"</span>: <span class="json-string">"Smith"</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"trainer"</span>
+  }
+}</div>`);
+            
+            // Aggregation
+            writeToTerminal(`\n<span class="bold">Aggregation pipeline example:</span>`);
+            writeToTerminal(`<div class="code-block">// Count animals by type and training status
+const animalStats = await RescueAnimal.aggregate([
+  {
+    $group: {
+      _id: {
+        animalType: "$animalType",
+        trainingStatus: "$trainingStatus"
+      },
+      count: { $sum: 1 }
+    }
+  },
+  {
+    $sort: { "_id.animalType": 1, "_id.trainingStatus": 1 }
+  }
+]);</div>`);
+            
+            writeToTerminal(`<div class="query-result">
+<div class="result-count">Results: Aggregation statistics</div>
+[
+  {
+    <span class="json-key">"_id"</span>: {
+      <span class="json-key">"animalType"</span>: <span class="json-string">"Bird"</span>,
+      <span class="json-key">"trainingStatus"</span>: <span class="json-string">"In Training"</span>
+    },
+    <span class="json-key">"count"</span>: <span class="json-number">2</span>
+  },
+  {
+    <span class="json-key">"_id"</span>: {
+      <span class="json-key">"animalType"</span>: <span class="json-string">"Dog"</span>,
+      <span class="json-key">"trainingStatus"</span>: <span class="json-string">"Ready"</span>
+    },
+    <span class="json-key">"count"</span>: <span class="json-number">3</span>
+  },
+  {
+    <span class="json-key">"_id"</span>: {
+      <span class="json-key">"animalType"</span>: <span class="json-string">"Dog"</span>,
+      <span class="json-key">"trainingStatus"</span>: <span class="json-string">"In Training"</span>
+    },
+    <span class="json-key">"count"</span>: <span class="json-number">2</span>
+  }
+]</div>`);
+
+            writeToTerminal(`\n<span class="highlight">Advanced Query Techniques</span>`);
+            writeToTerminal(`- <span class="bold">Text Search:</span> Full-text search capabilities for finding animals by description`);
+            writeToTerminal(`- <span class="bold">Geospatial Queries:</span> For location-based searches (e.g., rescues near a specific location)`);
+            writeToTerminal(`- <span class="bold">Complex Filtering:</span> Using $and, $or, $not operators for sophisticated query conditions`);
+            writeToTerminal(`- <span class="bold">Projection:</span> Retrieving only specific fields to optimize performance`);
+            
+            writeToTerminal(`\n<span class="info">Type 'security' to learn about database security or 'menu' to return to main menu.</span>`);
+        }
+        
+        /**
+         * Displays database security information
+         * 
+         * @function showDatabaseSecurity
+         * @description Explains database security measures implemented in the system
+         * @returns {void}
+         */
+        function showDatabaseSecurity() {
+            clearTerminal();
+            writeToTerminal(`<span class="info bold">MongoDB Database Security</span>`);
+            writeToTerminal(`The Grazios Rescue System implements comprehensive security measures to protect data stored in MongoDB Atlas:`);
+            
+            writeToTerminal(`\n<span class="highlight">Authentication and Authorization</span>`);
+            writeToTerminal(`- <span class="bold">User Authentication:</span> Secure user login with bcrypt password hashing`);
+            writeToTerminal(`- <span class="bold">JWT Token Authentication:</span> Secure API access with JSON Web Tokens`);
+            writeToTerminal(`- <span class="bold">Role-based Access Control:</span> Different access levels for admin, trainer, veterinarian, and staff`);
+            
+            writeToTerminal(`\n<span class="highlight">MongoDB Atlas Security Features</span>`);
+            writeToTerminal(`- <span class="bold">TLS/SSL Encryption:</span> All data in transit is encrypted`);
+            writeToTerminal(`- <span class="bold">IP Allowlisting:</span> Database access restricted to specific IP addresses`);
+            writeToTerminal(`- <span class="bold">VPC Peering:</span> Private network connection in production`);
+            writeToTerminal(`- <span class="bold">Database Auditing:</span> Tracking all database operations`);
+            writeToTerminal(`- <span class="bold">Automated Backups:</span> Regular backups with point-in-time recovery`);
+            
+            writeToTerminal(`\n<span class="highlight">Data Validation and Integrity</span>`);
+            writeToTerminal(`- <span class="bold">Schema Validation:</span> Mongoose schemas enforce data structure and validation`);
+            writeToTerminal(`- <span class="bold">Middleware Validation:</span> Request data validated before database operations`);
+            writeToTerminal(`- <span class="bold">Sanitization:</span> Input data sanitized to prevent injection attacks`);
+            
+            writeToTerminal(`\n<span class="highlight">API Security Implementation:</span>`);
+            writeToTerminal(`<div class="code-block">// Authentication middleware
+const authMiddleware = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return next(ApiError.unauthorized('Authentication required'));
+    }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    
+    if (!user) {
+      return next(ApiError.unauthorized('User not found'));
+    }
+    
+    // Attach user to request
+    req.user = user;
+    next();
+  } catch (error) {
+    return next(ApiError.unauthorized('Invalid token'));
+  }
+};</div>`);
+            
+            writeToTerminal(`\n<span class="bold">Role-based authorization:</span>`);
+            writeToTerminal(`<div class="code-block">// Role-based authorization middleware
+const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        ApiError.forbidden('You do not have permission to perform this action')
+      );
+    }
+    next();
+  };
+};</div>`);
+            
+            writeToTerminal(`\n<span class="highlight">Error Handling</span>`);
+            writeToTerminal(`- <span class="bold">Centralized Error Handler:</span> Consistent error responses across the API`);
+            writeToTerminal(`- <span class="bold">Validation Errors:</span> Detailed validation error messages`);
+            writeToTerminal(`- <span class="bold">Authentication Errors:</span> Secure authentication error handling`);
+            writeToTerminal(`- <span class="bold">Database Errors:</span> Safe database error responses that don't leak sensitive information`);
+            
+            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or 'overview' to see the database architecture overview.</span>`);
+        }
+        
+        // Set initial focus to input
+        inputElement.focus();
+        
+        // Event listener to keep focus on input when clicking anywhere in terminal
+        document.querySelector('.terminal').addEventListener('click', () => {
+            inputElement.focus();
+        });
