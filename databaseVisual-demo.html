@@ -391,7 +391,8 @@
          */
         function returnToHomePage() {
             try {
-                window.location.href = 'index.html';
+                // In a standalone demo, just show a message
+                writeToTerminal(`<span class="warning">This is a standalone demo. In a real application, this would navigate to index.html.</span>`);
             } catch (error) {
                 writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
             }
@@ -451,7 +452,7 @@
                         case '7':
                             returnToHomePage();
                             break;
-                                             default:
+                        default:
                             writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
                             writeToTerminal(`Type 'help' to see available commands.`);
                     }
@@ -492,21 +493,6 @@
             outputElement.innerHTML = '';
             writeToTerminal(`<span class="info bold">Grazios Rescue System v1.0.1</span>`);
             writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu or 'help' for available commands.`);
-        }
-        
-        /**
-         * Returns user to the main GitHub Pages index
-         * 
-         * @function returnToHomePage
-         * @description Redirects the user to the main portfolio page
-         * @returns {void}
-         */
-        function returnToHomePage() {
-            try {
-                window.location.href = 'index.html';
-            } catch (error) {
-                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
-            }
         }
         
         /**
@@ -659,20 +645,20 @@
             writeToTerminal(`\n<span class="info">Type 'relationships' to see how these schemas are connected or 'menu' to return to main menu.</span>`);
         }
         
-        /**
-         * Displays data relationship diagrams
-         * 
-         * @function showDataRelationships
-         * @description Illustrates the relationships between different MongoDB collections
-         * @returns {void}
-         */
-        function showDataRelationships() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">MongoDB Data Relationships</span>`);
-            writeToTerminal(`The Grazios Rescue System uses MongoDB's reference-based relationships to connect related documents across collections. These relationships enable complex queries while maintaining data integrity.`);
-            
-            writeToTerminal(`\n<span class="highlight">RescueAnimal Inheritance Hierarchy</span>`);
-            writeToTerminal(`<div class="db-diagram">
+       /**
+ * Displays data relationship diagrams
+ * 
+ * @function showDataRelationships
+ * @description Illustrates the relationships between different MongoDB collections
+ * @returns {void}
+ */
+function showDataRelationships() {
+    clearTerminal();
+    writeToTerminal(`<span class="info bold">MongoDB Data Relationships</span>`);
+    writeToTerminal(`The Grazios Rescue System uses MongoDB's reference-based relationships to connect related documents across collections. These relationships enable complex queries while maintaining data integrity.`);
+    
+    writeToTerminal(`\n<span class="highlight">RescueAnimal Inheritance Hierarchy</span>`);
+    writeToTerminal(`<div class="db-diagram">
     <div class="db-entity">
         <div class="db-entity-title">RescueAnimal (Base Collection)</div>
         <div>All shared animal attributes</div>
@@ -697,10 +683,10 @@
             <div>Horse-specific fields</div>
         </div>
     </div>
-</div>
+</div>`);
 
-            writeToTerminal(`\n<span class="highlight">Core Relationship Network</span>`);
-            writeToTerminal(`<div class="db-diagram">
+    writeToTerminal(`\n<span class="highlight">Core Relationship Network</span>`);
+    writeToTerminal(`<div class="db-diagram">
     <div class="db-entity">
         <div class="db-entity-title">RescueAnimal</div>
         <div>Central entity that relates to all other collections</div>
@@ -733,35 +719,35 @@
             <div>MedicalRecord.medications → [Medication._id]</div>
         </div>
     </div>
-</div>
+</div>`);
 
-            writeToTerminal(`\n<span class="highlight">Data Relationship Implementation</span>`);
-            writeToTerminal(`The Grazios database uses MongoDB references in these ways:`);
-            writeToTerminal(`- <span class="bold">Direct References:</span> Store ObjectIds in fields (e.g., animal.assignedTrainer = trainerId)`);
-            writeToTerminal(`- <span class="bold">Array References:</span> Store arrays of ObjectIds for one-to-many relationships`);
-            writeToTerminal(`- <span class="bold">Bi-directional References:</span> Both parent and child documents reference each other when needed`);
-            writeToTerminal(`- <span class="bold">Population:</span> Using Mongoose's populate() to retrieve related documents in queries`);
-            
-            writeToTerminal(`\n<span class="info">Type 'query' to see example MongoDB queries or 'menu' to return to main menu.</span>`);
-        }
-        
-        /**
-         * Displays query operation examples
-         * 
-         * @function showQueryOperations
-         * @description Shows examples of MongoDB query operations and their results
-         * @returns {void}
-         */
-        function showQueryOperations() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">MongoDB Query Operations</span>`);
-            writeToTerminal(`The Grazios Rescue System leverages MongoDB's powerful query capabilities to retrieve, filter, and analyze data. Below are examples of common query operations used in the application:`);
-            
-            writeToTerminal(`\n<span class="highlight">Basic CRUD Operations</span>`);
-            
-            // Create
-            writeToTerminal(`<span class="bold">Creating a new Dog document:</span>`);
-            writeToTerminal(`<div class="code-block">// Creating a new Dog document
+    writeToTerminal(`\n<span class="highlight">Data Relationship Implementation</span>`);
+    writeToTerminal(`The Grazios database uses MongoDB references in these ways:`);
+    writeToTerminal(`- <span class="bold">Direct References:</span> Store ObjectIds in fields (e.g., animal.assignedTrainer = trainerId)`);
+    writeToTerminal(`- <span class="bold">Array References:</span> Store arrays of ObjectIds for one-to-many relationships`);
+    writeToTerminal(`- <span class="bold">Bi-directional References:</span> Both parent and child documents reference each other when needed`);
+    writeToTerminal(`- <span class="bold">Population:</span> Using Mongoose's populate() to retrieve related documents in queries`);
+    
+    writeToTerminal(`\n<span class="info">Type 'query' to see example MongoDB queries or 'menu' to return to main menu.</span>`);
+}
+
+/**
+ * Displays query operation examples
+ * 
+ * @function showQueryOperations
+ * @description Shows examples of MongoDB query operations and their results
+ * @returns {void}
+ */
+function showQueryOperations() {
+    clearTerminal();
+    writeToTerminal(`<span class="info bold">MongoDB Query Operations</span>`);
+    writeToTerminal(`The Grazios Rescue System leverages MongoDB's powerful query capabilities to retrieve, filter, and analyze data. Below are examples of common query operations used in the application:`);
+    
+    writeToTerminal(`\n<span class="highlight">Basic CRUD Operations</span>`);
+    
+    // Create
+    writeToTerminal(`<span class="bold">Creating a new Dog document:</span>`);
+    writeToTerminal(`<div class="code-block">// Creating a new Dog document
 const newDog = new Dog({
   name: 'Rex',
   species: 'Canine',
@@ -775,18 +761,18 @@ const newDog = new Dog({
 });
 
 await newDog.save();</div>`);
-            
-            // Read
-            writeToTerminal(`\n<span class="bold">Finding animals by criteria:</span>`);
-            writeToTerminal(`<div class="code-block">// Find all therapy dogs with high obedience level
+    
+    // Read
+    writeToTerminal(`\n<span class="bold">Finding animals by criteria:</span>`);
+    writeToTerminal(`<div class="code-block">// Find all therapy dogs with high obedience level
 const therapyDogs = await Dog.find({
   serviceType: 'THERAPY',
   obedienceLevel: { $gte: 4 },
   trainingStatus: 'Ready',
   reserved: false
 });</div>`);
-            
-            writeToTerminal(`<div class="query-result">
+    
+    writeToTerminal(`<div class="query-result">
 <div class="result-count">Results: 2 documents found</div>
 [
   {
@@ -814,15 +800,15 @@ const therapyDogs = await Dog.find({
     <span class="json-key">"reserved"</span>: <span class="json-boolean">false</span>
   }
 ]</div>`);
-            
-            // Complex Query with Population
-            writeToTerminal(`\n<span class="bold">Complex query with population:</span>`);
-            writeToTerminal(`<div class="code-block">// Find an animal with its medical records and trainer
+    
+    // Complex Query with Population
+    writeToTerminal(`\n<span class="bold">Complex query with population:</span>`);
+    writeToTerminal(`<div class="code-block">// Find an animal with its medical records and trainer
 const animalWithRecords = await RescueAnimal.findById(animalId)
   .populate('medicalRecords')
   .populate('assignedTrainer');</div>`);
-            
-            writeToTerminal(`<div class="query-result">
+    
+    writeToTerminal(`<div class="query-result">
 <div class="result-count">Results: Document with populated references</div>
 {
   <span class="json-key">"_id"</span>: <span class="json-string">"60f7a9b7e85d22001f7c1a3b"</span>,
@@ -845,10 +831,10 @@ const animalWithRecords = await RescueAnimal.findById(animalId)
     <span class="json-key">"role"</span>: <span class="json-string">"trainer"</span>
   }
 }</div>`);
-            
-            // Aggregation
-            writeToTerminal(`\n<span class="bold">Aggregation pipeline example:</span>`);
-            writeToTerminal(`<div class="code-block">// Count animals by type and training status
+    
+    // Aggregation
+    writeToTerminal(`\n<span class="bold">Aggregation pipeline example:</span>`);
+    writeToTerminal(`<div class="code-block">// Count animals by type and training status
 const animalStats = await RescueAnimal.aggregate([
   {
     $group: {
@@ -863,8 +849,8 @@ const animalStats = await RescueAnimal.aggregate([
     $sort: { "_id.animalType": 1, "_id.trainingStatus": 1 }
   }
 ]);</div>`);
-            
-            writeToTerminal(`<div class="query-result">
+    
+    writeToTerminal(`<div class="query-result">
 <div class="result-count">Results: Aggregation statistics</div>
 [
   {
@@ -890,46 +876,46 @@ const animalStats = await RescueAnimal.aggregate([
   }
 ]</div>`);
 
-            writeToTerminal(`\n<span class="highlight">Advanced Query Techniques</span>`);
-            writeToTerminal(`- <span class="bold">Text Search:</span> Full-text search capabilities for finding animals by description`);
-            writeToTerminal(`- <span class="bold">Geospatial Queries:</span> For location-based searches (e.g., rescues near a specific location)`);
-            writeToTerminal(`- <span class="bold">Complex Filtering:</span> Using $and, $or, $not operators for sophisticated query conditions`);
-            writeToTerminal(`- <span class="bold">Projection:</span> Retrieving only specific fields to optimize performance`);
-            
-            writeToTerminal(`\n<span class="info">Type 'security' to learn about database security or 'menu' to return to main menu.</span>`);
-        }
-        
-        /**
-         * Displays database security information
-         * 
-         * @function showDatabaseSecurity
-         * @description Explains database security measures implemented in the system
-         * @returns {void}
-         */
-        function showDatabaseSecurity() {
-            clearTerminal();
-            writeToTerminal(`<span class="info bold">MongoDB Database Security</span>`);
-            writeToTerminal(`The Grazios Rescue System implements comprehensive security measures to protect data stored in MongoDB Atlas:`);
-            
-            writeToTerminal(`\n<span class="highlight">Authentication and Authorization</span>`);
-            writeToTerminal(`- <span class="bold">User Authentication:</span> Secure user login with bcrypt password hashing`);
-            writeToTerminal(`- <span class="bold">JWT Token Authentication:</span> Secure API access with JSON Web Tokens`);
-            writeToTerminal(`- <span class="bold">Role-based Access Control:</span> Different access levels for admin, trainer, veterinarian, and staff`);
-            
-            writeToTerminal(`\n<span class="highlight">MongoDB Atlas Security Features</span>`);
-            writeToTerminal(`- <span class="bold">TLS/SSL Encryption:</span> All data in transit is encrypted`);
-            writeToTerminal(`- <span class="bold">IP Allowlisting:</span> Database access restricted to specific IP addresses`);
-            writeToTerminal(`- <span class="bold">VPC Peering:</span> Private network connection in production`);
-            writeToTerminal(`- <span class="bold">Database Auditing:</span> Tracking all database operations`);
-            writeToTerminal(`- <span class="bold">Automated Backups:</span> Regular backups with point-in-time recovery`);
-            
-            writeToTerminal(`\n<span class="highlight">Data Validation and Integrity</span>`);
-            writeToTerminal(`- <span class="bold">Schema Validation:</span> Mongoose schemas enforce data structure and validation`);
-            writeToTerminal(`- <span class="bold">Middleware Validation:</span> Request data validated before database operations`);
-            writeToTerminal(`- <span class="bold">Sanitization:</span> Input data sanitized to prevent injection attacks`);
-            
-            writeToTerminal(`\n<span class="highlight">API Security Implementation:</span>`);
-            writeToTerminal(`<div class="code-block">// Authentication middleware
+    writeToTerminal(`\n<span class="highlight">Advanced Query Techniques</span>`);
+    writeToTerminal(`- <span class="bold">Text Search:</span> Full-text search capabilities for finding animals by description`);
+    writeToTerminal(`- <span class="bold">Geospatial Queries:</span> For location-based searches (e.g., rescues near a specific location)`);
+    writeToTerminal(`- <span class="bold">Complex Filtering:</span> Using $and, $or, $not operators for sophisticated query conditions`);
+    writeToTerminal(`- <span class="bold">Projection:</span> Retrieving only specific fields to optimize performance`);
+    
+    writeToTerminal(`\n<span class="info">Type 'security' to learn about database security or 'menu' to return to main menu.</span>`);
+}
+
+/**
+ * Displays database security information
+ * 
+ * @function showDatabaseSecurity
+ * @description Explains database security measures implemented in the system
+ * @returns {void}
+ */
+function showDatabaseSecurity() {
+    clearTerminal();
+    writeToTerminal(`<span class="info bold">MongoDB Database Security</span>`);
+    writeToTerminal(`The Grazios Rescue System implements comprehensive security measures to protect data stored in MongoDB Atlas:`);
+    
+    writeToTerminal(`\n<span class="highlight">Authentication and Authorization</span>`);
+    writeToTerminal(`- <span class="bold">User Authentication:</span> Secure user login with bcrypt password hashing`);
+    writeToTerminal(`- <span class="bold">JWT Token Authentication:</span> Secure API access with JSON Web Tokens`);
+    writeToTerminal(`- <span class="bold">Role-based Access Control:</span> Different access levels for admin, trainer, veterinarian, and staff`);
+    
+    writeToTerminal(`\n<span class="highlight">MongoDB Atlas Security Features</span>`);
+    writeToTerminal(`- <span class="bold">TLS/SSL Encryption:</span> All data in transit is encrypted`);
+    writeToTerminal(`- <span class="bold">IP Allowlisting:</span> Database access restricted to specific IP addresses`);
+    writeToTerminal(`- <span class="bold">VPC Peering:</span> Private network connection in production`);
+    writeToTerminal(`- <span class="bold">Database Auditing:</span> Tracking all database operations`);
+    writeToTerminal(`- <span class="bold">Automated Backups:</span> Regular backups with point-in-time recovery`);
+    
+    writeToTerminal(`\n<span class="highlight">Data Validation and Integrity</span>`);
+    writeToTerminal(`- <span class="bold">Schema Validation:</span> Mongoose schemas enforce data structure and validation`);
+    writeToTerminal(`- <span class="bold">Middleware Validation:</span> Request data validated before database operations`);
+    writeToTerminal(`- <span class="bold">Sanitization:</span> Input data sanitized to prevent injection attacks`);
+    
+    writeToTerminal(`\n<span class="highlight">API Security Implementation:</span>`);
+    writeToTerminal(`<div class="code-block">// Authentication middleware
 const authMiddleware = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -952,9 +938,9 @@ const authMiddleware = async (req, res, next) => {
     return next(ApiError.unauthorized('Invalid token'));
   }
 };</div>`);
-            
-            writeToTerminal(`\n<span class="bold">Role-based authorization:</span>`);
-            writeToTerminal(`<div class="code-block">// Role-based authorization middleware
+    
+    writeToTerminal(`\n<span class="bold">Role-based authorization:</span>`);
+    writeToTerminal(`<div class="code-block">// Role-based authorization middleware
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -965,28 +951,35 @@ const authorizeRoles = (...roles) => {
     next();
   };
 };</div>`);
-            
-            writeToTerminal(`\n<span class="highlight">Error Handling</span>`);
-            writeToTerminal(`- <span class="bold">Centralized Error Handler:</span> Consistent error responses across the API`);
-            writeToTerminal(`- <span class="bold">Validation Errors:</span> Detailed validation error messages`);
-            writeToTerminal(`- <span class="bold">Authentication Errors:</span> Secure authentication error handling`);
-            writeToTerminal(`- <span class="bold">Database Errors:</span> Safe database error responses that don't leak sensitive information`);
-            
-            writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or 'overview' to see the database architecture overview.</span>`);
-        }
-        
-        // Set initial focus to input
-        inputElement.focus();
-        
-        // Event listener to keep focus on input when clicking anywhere in terminal
-        document.querySelector('.terminal').addEventListener('click', () => {
-            inputElement.focus();
-        });
+    
+    writeToTerminal(`\n<span class="highlight">Error Handling</span>`);
+    writeToTerminal(`- <span class="bold">Centralized Error Handler:</span> Consistent error responses across the API`);
+    writeToTerminal(`- <span class="bold">Validation Errors:</span> Detailed validation error messages`);
+    writeToTerminal(`- <span class="bold">Authentication Errors:</span> Secure authentication error handling`);
+    writeToTerminal(`- <span class="bold">Database Errors:</span> Safe database error responses that don't leak sensitive information`);
+    
+    writeToTerminal(`\n<span class="info">Type 'menu' to return to main menu or 'overview' to see the database architecture overview.</span>`);
+}
 
-        // Ensure the input element always has focus
-        inputElement.addEventListener('blur', () => {
-            setTimeout(() => inputElement.focus(), 10);
-        });
+        // Set initial focus to input
+document.addEventListener('DOMContentLoaded', function() {
+    inputElement.focus();
+    
+    // Make menu options clickable
+    document.querySelectorAll('.menu-option').forEach(option => {
+        option.style.cursor = 'pointer';
+    });
+});
+
+// Event listener to keep focus on input when clicking anywhere in terminal
+document.querySelector('.terminal').addEventListener('click', () => {
+    inputElement.focus();
+});
+
+// Ensure the input element always has focus
+inputElement.addEventListener('blur', () => {
+    setTimeout(() => inputElement.focus(), 10);
+});
     </script>
 </body>
 </html>
