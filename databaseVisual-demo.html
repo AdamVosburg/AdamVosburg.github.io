@@ -383,6 +383,21 @@
         const inputElement = document.getElementById('terminal-input');
         
         /**
+         * Returns user to the main GitHub Pages index
+         * 
+         * @function returnToHomePage
+         * @description Redirects the user to the main portfolio page
+         * @returns {void}
+         */
+        function returnToHomePage() {
+            try {
+                window.location.href = 'index.html';
+            } catch (error) {
+                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
+            }
+        }
+        
+        /**
          * Handles terminal input events
          * 
          * @function handleInput
@@ -450,21 +465,6 @@
         }
         
         /**
-         * Returns user to the main GitHub Pages index
-         * 
-         * @function returnToHomePage
-         * @description Redirects the user to the main portfolio page
-         * @returns {void}
-         */
-        function returnToHomePage() {
-            try {
-                window.location.href = 'index.html';
-            } catch (error) {
-                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
-            }
-        }
-        
-        /**
          * Writes output to the terminal
          * 
          * @function writeToTerminal
@@ -482,7 +482,7 @@
         }
         
         /**
-         * Clears the terminal output
+         * Clears the terminal
          * 
          * @function clearTerminal
          * @description Resets terminal output and displays initial message
@@ -967,3 +967,11 @@ const authorizeRoles = (...roles) => {
         document.querySelector('.terminal').addEventListener('click', () => {
             inputElement.focus();
         });
+
+        // Ensure the input element always has focus
+        inputElement.addEventListener('blur', () => {
+            setTimeout(() => inputElement.focus(), 10);
+        });
+    </script>
+</body>
+</html>
