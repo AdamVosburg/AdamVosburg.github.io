@@ -451,7 +451,7 @@
                         case '7':
                             returnToHomePage();
                             break;
-                        default:
+                                             default:
                             writeToTerminal(`<span class="error">Command not recognized: ${command}</span>`);
                             writeToTerminal(`Type 'help' to see available commands.`);
                     }
@@ -459,7 +459,7 @@
                     writeToTerminal(`<span class="error">Error processing command: ${error.message}</span>`);
                 }
                 
-                // Ensure terminal scrolls to bottom
+                // Scroll to bottom
                 outputElement.scrollTop = outputElement.scrollHeight;
             }
         }
@@ -482,7 +482,7 @@
         }
         
         /**
-         * Clears the terminal
+         * Clears the terminal output
          * 
          * @function clearTerminal
          * @description Resets terminal output and displays initial message
@@ -490,8 +490,23 @@
          */
         function clearTerminal() {
             outputElement.innerHTML = '';
-            writeToTerminal(`<span class="info bold">Grazios Rescue System - Database Architecture v1.0.0</span>`);
+            writeToTerminal(`<span class="info bold">Grazios Rescue System v1.0.1</span>`);
             writeToTerminal(`Terminal cleared. Type 'menu' to return to main menu or 'help' for available commands.`);
+        }
+        
+        /**
+         * Returns user to the main GitHub Pages index
+         * 
+         * @function returnToHomePage
+         * @description Redirects the user to the main portfolio page
+         * @returns {void}
+         */
+        function returnToHomePage() {
+            try {
+                window.location.href = 'index.html';
+            } catch (error) {
+                writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
+            }
         }
         
         /**
