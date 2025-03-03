@@ -391,8 +391,7 @@
          */
         function returnToHomePage() {
             try {
-                // In a standalone demo, just show a message
-                writeToTerminal(`<span class="warning">This is a standalone demo. In a real application, this would navigate to index.html.</span>`);
+                window.location.href = 'index.html';
             } catch (error) {
                 writeToTerminal(`<span class="error">Navigation error: ${error.message}</span>`);
             }
