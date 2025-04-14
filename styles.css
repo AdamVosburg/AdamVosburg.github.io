@@ -1,4 +1,6 @@
-/* Narrative cards and links styling */
+/* Add these styles at the end of your existing styles.css file */
+
+/* Narrative links styling - should work with your existing CSS */
 .narrative-links {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -44,36 +46,6 @@
     background-color: #555;
 }
 
-/* Narrative content page styling */
-.narrative-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.narrative-content article {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.narrative-content h2 {
-    color: #333;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 0.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-}
-
-.narrative-content h2:first-child {
-    margin-top: 0;
-}
-
-.back-button {
-    text-align: center;
-    margin-top: 2rem;
-}
-
 /* Code sections for original project */
 .code-section {
     margin-bottom: 2rem;
@@ -105,30 +77,9 @@
     color: #333;
 }
 
-.narrative-content ul {
-    padding-left: 1.5rem;
-}
-
-.narrative-content li {
-    margin-bottom: 0.5rem;
-}
-
-/* Responsive adjustments */
+/* Only add this media query if you don't already have one similar */
 @media (max-width: 768px) {
     .narrative-links {
         grid-template-columns: 1fr;
-    }
-    
-    .narrative-content article {
-        padding: 1rem;
-    }
-    
-    .code-section {
-        padding: 1rem;
-    }
-    
-    .code-section pre {
-        padding: 0.75rem;
-        font-size: 0.8rem;
     }
 }
