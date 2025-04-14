@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8"> 
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Software Design Enhancement | Adam Vosburg's ePortfolio</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <!-- Main content wrapper to contain the semi-transparent background -->
+   <div class="content-wrapper">
+       <!-- Header section that contains my name and title -->
+       <header>
+          <h1>Milestone 2 (Enhancement One): Software Design</h1>
+          <h2>Adam Vosburg | CS-499 Capstone</h2>
+       </header>
+       
+       <!-- Navigation menu -->
+       <nav>
+           <ul>
+               <li><a href="index.html">Home</a></li>
+               <li><a href="professional-review.html">Professional Review</a></li>
+               <li><a href="code-review.html">Code Review</a></li>
+               <li><a href="software-design.html">Software Design</a></li>
+               <li><a href="algorithm-demo.html">Algorithms</a></li>
+               <li><a href="databaseVisual-demo.html">Databases</a></li>
+           </ul>
+       </nav>
+       
+       <!-- Main content area -->
+       <main class="narrative-content">
+           <article>
+               <p>The Grazios Rescue System is a comprehensive Node.js application I
+developed to manage animal rescue operations. Originally created in
+early 2023 as part of a database management course, the system
+facilitates tracking of rescued animals, their medical records, training
+programs, and staff assignments. The application was initially
+functional but lacked proper documentation and contained numerous debug
+console logs that cluttered the codebase, making it difficult for other
+developers to understand and maintain.</p>
+
+               <p>I selected this artifact for my ePortfolio because it demonstrates my
+ability to architect a complete MVC (Model-View-Controller) backend
+system using modern JavaScript practices while showcasing my proficiency
+with MongoDB, Express, and RESTful API design. The system's
+complexity—handling different animal types through inheritance models,
+managing interconnected training and medical systems, and implementing
+proper authentication—exemplifies my capability to design
+comprehensive solutions for multifaceted business requirements. My
+enhancement process focused on transforming the codebase into a
+professionally documented project following industry best practices. I
+systematically added JSDoc documentation to all files, clarifying the
+purpose of each module, class, and method while documenting parameters,
+return values, and potential errors. I removed hundreds of diagnostic
+console logs that were originally used for debugging, streamlining the
+code for production readiness. Additionally, I restructured some
+components to improve maintainability, particularly in the validation
+middleware where I resolved static class property issues that were
+causing runtime errors.</p>
+
+               <p>This enhancement directly addressed the course outcomes I planned to
+meet, particularly demonstrating my ability to "employ strategies for
+building collaborative environments that enable diverse audiences to
+support organizational decision making" through code documentation that
+makes the system accessible to new team members. The improved code
+organization and thorough documentation support the outcome of designing
+and evaluating computing solutions that solve a given problem using
+algorithmic principles. One area where I expanded beyond my initial
+outcome plans was in security implementation—through this enhancement
+process, I identified and addressed potential security vulnerabilities
+in the authentication system and database connection handling.</p>
+
+               <p>The enhancement process proved to be more enlightening than I
+anticipated. As I documented each component, I gained a deeper
+understanding of how the entire system interconnects and discovered
+opportunities for architectural improvements. One significant challenge
+was deciding the appropriate level of documentation detail—too little
+would fail to provide adequate guidance, while too much would create
+maintenance overhead. I learned that effective documentation should
+explain not just what code does but why certain design decisions were
+made. The most challenging aspect was refactoring the validation
+middleware, which required understanding static class property behavior
+across different JavaScript engines. This reinforced how important it is
+to consider cross-environment compatibility when building production
+systems. Through this process, I've developed a more disciplined
+approach to documentation that I now implement from the beginning of
+projects rather than as an afterthought. This enhanced Grazios Rescue
+System stands as evidence of my commitment to creating not just
+functional software, but professionally maintainable code that supports
+team collaboration and long-term system evolution.</p>
+           </article>
+           
+           <!-- Back button -->
+           <div class="back-button">
+               <a href="index.html" class="btn">Back to Home</a>
+           </div>
+       </main>
+       
+       <!-- Footer -->
+       <footer>
+           <p>&copy; 2025 Adam Vosburg | 
+              <a href="https://github.com/AdamVosburg" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+           </p>
+       </footer>
+   </div>
+</body>
+</html>
