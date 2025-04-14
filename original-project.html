@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8"> 
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Original Project | Adam Vosburg's ePortfolio</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <!-- Main content wrapper to contain the semi-transparent background -->
+   <div class="content-wrapper">
+       <!-- Header section that contains my name and title -->
+       <header>
+          <h1>Original Grazios Rescue Project</h1>
+          <h2>Java Command-Line Application</h2>
+       </header>
+       
+       <!-- Navigation menu -->
+       <nav>
+           <ul>
+               <li><a href="index.html">Home</a></li>
+               <li><a href="professional-review.html">Professional Review</a></li>
+               <li><a href="code-review.html">Code Review</a></li>
+               <li><a href="software-design.html">Software Design</a></li>
+               <li><a href="algorithm-demo.html">Algorithms</a></li>
+               <li><a href="databaseVisual-demo.html">Databases</a></li>
+           </ul>
+       </nav>
+       
+       <!-- Main content area -->
+       <main class="narrative-content">
+           <article>
+               <h2>Project Overview</h2>
+               <p>The original Grazios Rescue System was a Java-based command-line application developed in January 2023 for IT-145. This project served as the foundation for my capstone enhancements, which transformed it into a comprehensive Node.js web application with MongoDB integration.</p>
+               
+               <p>The original project implemented a simple object-oriented system for tracking rescue animals (dogs and monkeys) through inheritance, allowing users to:</p>
+               <ul>
+                   <li>Intake new animals (dogs and monkeys)</li>
+                   <li>Reserve animals for service</li>
+                   <li>View lists of available animals</li>
+                   <li>Track training status and service locations</li>
+               </ul>
+               
+               <h2>Core Classes</h2>
+               
+               <div class="code-section">
+                   <h3>RescueAnimal.java</h3>
+                   <p>Base class defining common properties for all rescue animals:</p>
+                   <pre><code class="language-java">//IT-145 Grazios Project
+// Adam Vosburg
+// 01/28/2023
+
+import java.lang.String;
+
+public class RescueAnimal {
+
+    // Instance variables
+    private String name;
+    private String animalType;
+    private String gender;
+    private String age;
+    private String weight;
+    private String acquisitionDate;
+    private String acquisitionCountry;
+    private String trainingStatus;
+    private boolean reserved;
+    private String inServiceCountry;
+
+    // Constructor
+    public RescueAnimal() {
+    }
+
+    // Getters and setters...
+}</code></pre>
+               </div>
+               
+               <div class="code-section">
+                   <h3>Dog.java</h3>
+                   <p>Specialized class for dog rescue animals:</p>
+                   <pre><code class="language-java">//IT-145 Grazios Project
+// Adam Vosburg
+// 01/28/2023
+
+public class Dog extends RescueAnimal {
+
+    // Instance variable
+    private String breed;
+
+    // Constructor
+    public Dog(String name, String breed, String gender, String age,
+    String weight, String acquisitionDate, String acquisitionCountry,
+    String trainingStatus, boolean reserved, String inServiceCountry) {
+        setName(name);
+        setBreed(breed);
+        setGender(gender);
+        setAge(age);
+        setWeight(weight);
+        setAcquisitionDate(acquisitionDate);
+        setAcquisitionLocation(acquisitionCountry);
+        setTrainingStatus(trainingStatus);
+        setReserved(reserved);
+        setInServiceCountry(inServiceCountry);
+    }
+
+    // Getters, setters, and toString method...
+}</code></pre>
+               </div>
+               
+               <div class="code-section">
+                   <h3>Monkey.java</h3>
+                   <p>Specialized class for monkey rescue animals:</p>
+                   <pre><code class="language-java">//IT-145 Grazios Project
+// Adam Vosburg
+// 01/28/2023
+
+public class Monkey extends RescueAnimal {
+
+    // Instance variable
+    private String species;
+    private String tailLength;
+    private String height;
+    private String bodyLength;
+
+    // Constructor
+    public Monkey(String name, String species, String age, String gender, 
+    String weight, String tailLength, String height, String bodyLength, String acquisitionDate, String acquisitionCountry,
+    String trainingStatus, boolean reserved, String inServiceCountry) {
+        setName(name);
+        setSpecies(species);
+        setGender(gender);
+        setAge(age);
+        setWeight(weight);
+        setTailLength(tailLength);
+        setHeight(height);
+        setBodyLength(bodyLength);
+        setAcquisitionDate(acquisitionDate);
+        setAcquisitionLocation(acquisitionCountry);
+        setTrainingStatus(trainingStatus);
+        setReserved(reserved);
+        setInServiceCountry(inServiceCountry);
+    }
+
+    // Getters, setters, and toString method...
+}</code></pre>
+               </div>
+               
+               <h2>From Java to Node.js: The Evolution</h2>
+               <p>The original Java project laid the groundwork for the concepts and data models that were later implemented in the enhanced Node.js application. Key transitions included:</p>
+               
+               <ul>
+                   <li><strong>Java Classes → MongoDB Schemas</strong>: Converting the inheritance model to MongoDB's discriminator pattern</li>
+                   <li><strong>Command Line → RESTful API</strong>: Transforming user interactions into HTTP endpoints</li>
+                   <li><strong>In-Memory Lists → Database Collections</strong>: Moving from ArrayList storage to persistent MongoDB collections</li>
+                   <li><strong>Basic Methods → Complex Algorithms</strong>: Evolving simple getters/setters into sophisticated matching algorithms</li>
+               </ul>
+               
+               <p>This evolution demonstrates my growth as a developer, from implementing basic object-oriented principles to developing a comprehensive web application with advanced features like schema inheritance, transaction support, and sophisticated matching algorithms.</p>
+           </article>
+           
+           <!-- Back button -->
+           <div class="back-button">
+               <a href="index.html" class="btn">Back to Home</a>
+           </div>
+       </main>
+       
+       <!-- Footer -->
+       <footer>
+           <p>&copy; 2025 Adam Vosburg | 
+              <a href="https://github.com/AdamVosburg" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+           </p>
+       </footer>
+   </div>
+</body>
+</html>
