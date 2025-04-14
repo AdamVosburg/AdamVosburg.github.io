@@ -1,0 +1,91 @@
+/* This is a standalone CSS file for narrative cards
+   Add a link to this file in your HTML head after your main styles.css file */
+
+.narrative-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.narrative-card {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.narrative-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.narrative-card h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+.narrative-card p {
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.narrative-btn {
+    display: inline-block;
+    background-color: #2d2d2d;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.narrative-btn:hover {
+    background-color: #555;
+}
+
+/* Code sections for original project */
+.code-section {
+    margin-bottom: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+
+.code-section h3 {
+    color: #333;
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.code-section pre {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-radius: 3px;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-section code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Back button for narrative pages */
+.back-button {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .narrative-links {
+        grid-template-columns: 1fr;
+    }
+}
