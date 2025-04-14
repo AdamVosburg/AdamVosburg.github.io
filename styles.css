@@ -1,14 +1,126 @@
-/* Add these styles at the end of your existing styles.css file */
+/* Base styles for the entire page */
+body {
+    background-color: #f5f5f5; /* Light gray background */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+/* Main content container */
+.content-wrapper {
+    background-color: rgba(255, 255, 255, 0.95);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 2rem;
+    max-width: 1200px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+/* Header styling */
+header {
+    text-align: center;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+header h1 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 2.5em;
+}
+header h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #444;
+}
+/* Navigation bar styling */
+nav {
+    background-color: #2d2d2d;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s;
+}
+nav a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+/* Hero image styling (background image approach) */
+.hero-image {
+    margin: 2rem 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: 200px; /* Fixed height */
+    background-image: url('image/deskandplants.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #f5f5f5; /* Light background to fill empty space */
+}
+/* Main content section styling */
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+/* Section styling */
+section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+}
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid #ddd;
+}
+footer a {
+    color: #0366d6;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+/* Video container for responsive embedded videos */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin: 20px 0;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 
-/* Narrative links styling - should work with your existing CSS */
-.narrative-links {
+/* Project grid and cards */
+.project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
 
-.narrative-card {
+.project-card {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -16,18 +128,18 @@
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.narrative-card:hover {
+.project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.narrative-card h3 {
+.project-card h3 {
     color: #333;
     margin-top: 0;
     margin-bottom: 0.75rem;
 }
 
-.narrative-card p {
+.project-card p {
     color: #555;
     margin-bottom: 1.5rem;
 }
@@ -44,6 +156,28 @@
 
 .btn:hover {
     background-color: #555;
+}
+
+/* Back button for narrative pages */
+.back-button {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+/* Code styling */
+pre {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-radius: 3px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333;
 }
 
 /* Code sections for original project */
@@ -70,16 +204,28 @@
     margin: 0;
 }
 
-.code-section code {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #333;
-}
-
-/* Only add this media query if you don't already have one similar */
+/* Responsive design */
 @media (max-width: 768px) {
-    .narrative-links {
+    .content-wrapper {
+        padding: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+    
+    /* Adjust hero image height on smaller screens */
+    .hero-image {
+        height: 150px;
+    }
+    
+    .project-grid {
         grid-template-columns: 1fr;
     }
 }
