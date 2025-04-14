@@ -1,6 +1,6 @@
 /* Base styles for the entire page */
 body {
-    background-color: #f5f5f5; /* Light gray background */
+    background-color: #f5f5f5; 
     margin: 0;
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -112,38 +112,7 @@ footer a:hover {
     height: 100%;
 }
 
-/* Project grid and cards */
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.project-card {
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.project-card h3 {
-    color: #333;
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-}
-
-.project-card p {
-    color: #555;
-    margin-bottom: 1.5rem;
-}
-
+/* Button styling */
 .btn {
     display: inline-block;
     background-color: #2d2d2d;
@@ -180,30 +149,6 @@ code {
     color: #333;
 }
 
-/* Code sections for original project */
-.code-section {
-    margin-bottom: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
-}
-
-.code-section h3 {
-    color: #333;
-    margin-top: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.5rem;
-}
-
-.code-section pre {
-    background-color: #f1f1f1;
-    padding: 1rem;
-    border-radius: 3px;
-    overflow-x: auto;
-    margin: 0;
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
     .content-wrapper {
@@ -223,9 +168,5 @@ code {
     /* Adjust hero image height on smaller screens */
     .hero-image {
         height: 150px;
-    }
-    
-    .project-grid {
-        grid-template-columns: 1fr;
     }
 }
